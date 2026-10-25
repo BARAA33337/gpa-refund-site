@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="GPA Refund — صفحة استبدال واسترجاع لمتاجر Shopify. احجز مكالمة التركيب.">
+<meta name="description" content="GPA Apps — 4 تطبيقات لمتاجر Shopify: استبدال واسترجاع، مساعد مقاسات، تأكيد الأوردرات على واتساب، ونادي ولاء للعملاء. احجز مكالمة التركيب.">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>GPA Refund</title>
+<title>GPA Apps</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -143,6 +143,45 @@
     .band { padding-block: 56px; }
   }
   @media (max-width: 480px) { .flow { grid-template-columns: 1fr; } }
+
+  /* apps */
+  .navlinks { display: flex; gap: 22px; font-size: 15px; }
+  .navlinks a { text-decoration: none; color: var(--muted); }
+  .navlinks a:hover { color: var(--ink); }
+  @media (max-width: 760px) { .navlinks { display: none; } }
+  .device { justify-self: center; width: min(300px, 78vw); aspect-ratio: 9 / 16; border-radius: 34px; padding: 10px; background: var(--ink); box-shadow: 0 40px 90px -40px rgba(13,22,32,.6); }
+  .device video { width: 100%; height: 100%; object-fit: cover; border-radius: 26px; display: block; background: #0b1117; }
+  .apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 34px; }
+  .app { background: var(--paper); border: 1px solid var(--line); border-radius: 22px; padding: 26px; display: grid; gap: 14px; align-content: start; min-width: 0; position: relative; }
+  .app .ic { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; font: 700 13px var(--mono); }
+  .app[data-a="refund"] .ic { background: var(--accent); color: var(--accent-ink); }
+  .app[data-a="size"] .ic { background: var(--tag); color: var(--tag-ink); }
+  .app[data-a="confirm"] .ic { background: #1fa855; color: #fff; }
+  .app[data-a="loyalty"] .ic { background: linear-gradient(135deg,#f3f3f3,#a7a7a7); color: #222; }
+  .app h3 { font-size: 24px; }
+  .app .pr { position: absolute; top: 24px; inset-inline-end: 24px; font: 600 14px var(--body); color: var(--muted); }
+  .app .pr b { color: var(--ink); font: 700 22px var(--display); }
+  .app .q { color: var(--muted); font-size: 16px; }
+  .app ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .app li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: 15px; }
+  .app li::before { content: "✓"; color: var(--accent); font-weight: 700; }
+  @media (max-width: 860px) { .apps { grid-template-columns: 1fr; } }
+  .vids { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 32px; }
+  .vid { display: grid; gap: 10px; min-width: 0; }
+  .vid video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 20px; background: #0b1117; border: 1px solid var(--line); }
+  .vid b { font-size: 16px; } .vid small { color: var(--muted); font-size: 14px; }
+  @media (max-width: 860px) { .vids { grid-template-columns: repeat(3, 72%); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; } .vid { scroll-snap-align: start; } }
+  .ptable { margin-top: 32px; background: var(--paper); border: 1px solid var(--line); border-radius: 24px; overflow: hidden; }
+  .prow { display: grid; grid-template-columns: 1.1fr 1fr 1.4fr; gap: 16px; padding: 22px 26px; align-items: center; border-top: 1px dashed var(--line); }
+  .prow:first-child { border-top: 0; }
+  .prow h3 { font-size: 20px; }
+  .prow .amt { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+  .prow .amt small { font: 500 15px var(--body); color: var(--muted); }
+  .prow p { color: var(--muted); font-size: 15px; }
+  .tiers { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tiers span { border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font-size: 13px; color: var(--muted); }
+  .tiers span b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  @media (max-width: 760px) { .prow { grid-template-columns: 1fr; gap: 8px; } }
 </style>
 
 </head>
@@ -150,7 +189,8 @@
 <div dir="rtl" lang="ar">
   <header class="nav">
     <div class="wrap">
-      <div class="logo"><i>GPA</i>Refund</div>
+      <div class="logo"><i>GPA</i>Apps</div>
+      <nav class="navlinks" aria-label="الصفحة"><a href="#apps">التطبيقات</a><a href="#videos">الفيديوهات</a><a href="#price">الأسعار</a><a href="#faq">أسئلة</a></nav>
       <a class="btn btn--ghost" href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ11YEoTp_SYa7MoUZKUfnv4kD4lpiJBCSsYaWaPVU2jeeLzbQRAoo0PwLH8cImiU7Nhl1yxF6qz" target="_blank" rel="noopener" style="min-height:44px;padding:10px 16px;font-size:15px">احجز مكالمة</a>
     </div>
   </header>
@@ -158,134 +198,121 @@
   <section class="band hero">
     <div class="wrap">
       <div class="copy">
-        <span class="eyebrow">صفحة استبدال واسترجاع لمتاجر Shopify</span>
-        <h1>عميلك عايز يبدّل؟ <em>خلّيها تخلص</em> في دقيقة.</h1>
-        <p class="lead">GPA Refund صفحة جوه متجرك، العميل يطلب منها الاستبدال أو الاسترجاع بنفسه: رقم الأوردر، المنتج والمقاس، والصور. والطلب يوصلك كامل ومنظّم بدل شات الواتساب.</p>
+        <span class="eyebrow">4 تطبيقات لمتاجر Shopify</span>
+        <h1>براندك يبيع أكتر، <em>ويتعب أقل.</em></h1>
+        <p class="lead">استبدال واسترجاع من غير واتساب، مقاس مظبوط من أول مرة، أوردرات متأكدة قبل الشحن، وعملاء بيرجعوا يشتروا تاني. كله باسم براندك وعلى متجرك.</p>
         <div class="ctas">
           <a class="btn btn--main" href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ11YEoTp_SYa7MoUZKUfnv4kD4lpiJBCSsYaWaPVU2jeeLzbQRAoo0PwLH8cImiU7Nhl1yxF6qz" target="_blank" rel="noopener">احجز مكالمة التركيب ←</a>
-          <a class="btn btn--ghost" href="#how">إزاي بتشتغل</a>
+          <a class="btn btn--ghost" href="#apps">شوف التطبيقات</a>
         </div>
-        <p class="note">مكالمة 30 دقيقة على Google Meet، من الأحد للخميس.</p>
+        <p class="note">التركيب علينا، ومن غير ما تغيّر الثيم بتاعك.</p>
       </div>
+      <div class="device"><video src="promo-voice.mp4" poster="promo-voice.jpg" controls playsinline preload="metadata" aria-label="فيديو GPA Refund"></video></div>
+    </div>
+  </section>
 
-      <div class="slip" aria-label="مثال لطلب استبدال من الصفحة">
-        <div class="url">yourbrand.com/pages/refund</div>
-        <h3>استبدال أو استرجاع</h3>
-        <div class="step"><span class="tick">✓</span><div><b>نوع الطلب</b><small>استبدال</small></div></div>
-        <div class="step"><span class="tick">✓</span><div><b>رقم الأوردر</b><small class="mono">#1043</small></div></div>
-        <div class="step"><span class="tick">✓</span><div><b>المنتج والمقاس</b><small>هودي أسود · من L لـ XL</small></div></div>
-        <div class="step"><span class="tick">✓</span><div><b>صور المنتج</b><small>3 صور</small></div></div>
-        <div class="stub"><span>طلب استبدال <span class="mono">#1043</span></span><span class="chip">وصلك ✓</span></div>
+  <section class="band" id="apps" style="padding-top:24px">
+    <div class="wrap">
+      <span class="eyebrow">التطبيقات</span>
+      <h2>كل تطبيق بيحل مشكلة بتاكل من مبيعاتك</h2>
+      <div class="apps">
+        <article class="app" data-a="refund">
+          <span class="pr">من <b>280</b> ج.م/شهر</span>
+          <span class="ic">RF</span>
+          <h3>GPA Refund &amp; Exchange</h3>
+          <p class="q">العميل عايز يبدّل؟ بدل رسايل وصور على الواتساب، يملا صفحة واحدة في دقيقة.</p>
+          <ul><li>بيانات الأوردر بتيجي لوحدها من رقم الطلب</li><li>صور المشكلة، والمقاس الجديد، وطريقة رد الفلوس</li><li>كل طلب يوصلك مرتب على الإيميل</li></ul>
+        </article>
+        <article class="app" data-a="size">
+          <span class="pr"><b>550</b> ج.م/شهر</span>
+          <span class="ic">SZ</span>
+          <h3>GPA Size</h3>
+          <p class="q">نص المرتجعات سببها المقاس. خلّي العميل يعرف مقاسه قبل ما يشتري.</p>
+          <ul><li>طوله ووزنه وستايله، ويطلعله المقاس المناسب</li><li>بيتحسب من جدول المقاسات العادي بتاعك</li><li>بيختار المقاس في صفحة المنتج بدوسة</li></ul>
+        </article>
+        <article class="app" data-a="confirm">
+          <span class="pr">من <b>320</b> ج.م/شهر</span>
+          <span class="ic">WA</span>
+          <h3>GPA Confirm</h3>
+          <p class="q">أوردرات الكاش اللي بترجع بتكلفك شحن رايح جاي. أكّدها على الواتساب قبل ما تشحن.</p>
+          <ul><li>رسالة تأكيد من رقم براندك بزرار تأكيد أو إلغاء</li><li>تفكير أوتوماتيك للي مردش</li><li>عرض منتج تاني بخصم بعد التأكيد، يتضاف لنفس الأوردر</li></ul>
+        </article>
+        <article class="app" data-a="loyalty">
+          <span class="pr"><b>450</b> ج.م/شهر</span>
+          <span class="ic">LY</span>
+          <h3>GPA Loyalty</h3>
+          <p class="q">العميل اللي اشترى مرة، خلّيه يرجع. نادي باسم براندك زي البراندات العالمية.</p>
+          <ul><li>نقاط على كل أوردر، ومستويات Silver وGold وBlack</li><li>مكافآت: خصومات، شحن مجاني، هدية عيد الميلاد</li><li>كارت عضوية ومهام تكسب نقاط</li></ul>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="band" style="padding-top:24px">
+  <section class="band paper" id="videos">
     <div class="wrap">
-      <span class="eyebrow">المشكلة</span>
-      <h2>الاستبدال على الواتساب بيضيّع وقتك وثقة العميل</h2>
-      <div class="pains">
-        <div class="pain"><h3>رسايل وصور في كل حتة</h3><p>رقم الأوردر في رسالة، والمقاس في رسالة، والصور بعد ساعة. وانت بتجمّع كل ده بإيدك.</p></div>
-        <div class="pain"><h3>مفيش سجل</h3><p>مين طلب إيه وامتى؟ مفيش مكان واحد ترجعله، والطلبات بتتنسي.</p></div>
-        <div class="pain"><h3>العميل بيقلق</h3><p>لما مايلاقيش طريقة واضحة يرجّع بيها، بيفكر مرتين قبل ما يشتري تاني.</p></div>
+      <span class="eyebrow">شوف بنفسك</span>
+      <h2>المشكلة والحل في 30 ثانية</h2>
+      <div class="vids">
+        <div class="vid"><video src="promo-voice.mp4" poster="promo-voice.jpg" controls playsinline preload="none"></video><b>GPA Refund بالصوت</b><small>من رسايل الواتساب لصفحة استبدال باسم براندك.</small></div>
+        <div class="vid"><video src="promo-music.mp4" poster="promo-music.jpg" controls playsinline preload="none"></video><b>GPA Refund بالمزيكا</b><small>نفس الفكرة من غير كلام، تنفع ستوري أو ريلز.</small></div>
+        <div class="vid"><video src="promo-short.mp4" poster="promo-short.jpg" controls playsinline preload="none"></video><b>النسخة القصيرة</b><small>إزاي الطلب بيوصلك جاهز في 4 خطوات.</small></div>
       </div>
-    </div>
-  </section>
-
-  <section class="band paper" id="how">
-    <div class="wrap">
-      <span class="eyebrow">من ناحية العميل</span>
-      <h2>4 خطوات، والطلب يوصلك جاهز</h2>
-      <ol class="flow">
-        <li><h3>يختار نوع الطلب</h3><p>استبدال بمقاس أو منتج تاني، أو استرجاع.</p></li>
-        <li><h3>يكتب رقم الأوردر</h3><p>ولو داخل بحسابه، أوردراته وبياناته بتظهر لوحدها.</p></li>
-        <li><h3>يختار المنتج والمقاس</h3><p>من منتجات متجرك، والمقاسات الخلصانة متعلّم عليها.</p></li>
-        <li><h3>يرفع الصور ويبعت</h3><p>صور المنتج والتيكت، ويوافق على سياسة الاسترجاع بتاعتك.</p></li>
-      </ol>
     </div>
   </section>
 
   <section class="band">
     <div class="wrap">
-      <span class="eyebrow">اللي بتاخده</span>
-      <h2>صفحة باسم براندك، وكل طلب متسجّل</h2>
-      <div class="feats">
-        <div class="feat"><span class="k">✓</span><div><h3>جوه متجرك</h3><p>الصفحة بشكل متجرك وعلى الدومين بتاعك، مش موقع تاني.</p></div></div>
-        <div class="feat"><span class="k">✓</span><div><h3>الطلب يوصلك منظّم</h3><p>على إيميل المتجر وفي شيت جوجل: النوع، الأوردر، المنتج، المقاس الجديد، والصور.</p></div></div>
-        <div class="feat"><span class="k">✓</span><div><h3>بياناته بتتملا لوحدها</h3><p>العميل يكتب رقم الأوردر والموبايل، والصفحة تجيب منتجات الأوردر.</p></div></div>
-        <div class="feat"><span class="k">✓</span><div><h3>سياستك وأسئلتك</h3><p>تعدّل السياسة والأسئلة الشائعة والأسباب من Customize من غير كود.</p></div></div>
-        <div class="feat"><span class="k">✓</span><div><h3>عربي أو إنجليزي</h3><p>بنركّبها باللغة اللي عملاؤك بيستخدموها.</p></div></div>
-        <div class="feat"><span class="k">✓</span><div><h3>أي ثيم Shopify</h3><p>بنركّبها على نسخة من الثيم الأول ونبعتلك تشوفها قبل ما تنزل.</p></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="band paper">
-    <div class="wrap">
-      <span class="eyebrow">التركيب</span>
-      <h2>من الحجز لحد ما الصفحة تشتغل</h2>
+      <span class="eyebrow">من الحجز لحد ما يشتغل</span>
+      <h2>انت بتحجز، وإحنا بنركّب</h2>
       <div class="setup">
-        <div class="s"><span class="t">30 min</span><h3>احجز مكالمة</h3><p>اختار ميعاد يناسبك، وخلّيك داخل على Shopify Admin وقت المكالمة.</p></div>
-        <div class="s"><span class="t">Preview</span><h3>بنركّبها وتشوفها</h3><p>بنركّب الصفحة على نسخة من الثيم ونبعتلك لينك تجرّبه بنفسك.</p></div>
-        <div class="s"><span class="t">Live</span><h3>تنزل للعملاء</h3><p>بعد موافقتك بنضيف الصفحة في متجرك ولينكها في الفوتر.</p></div>
+        <div class="s"><span class="t">01</span><h3>مكالمة 15 دقيقة</h3><p>نعرف براندك ومشاكله، ونختار التطبيقات اللي هتفرق معاك.</p></div>
+        <div class="s"><span class="t">02</span><h3>نركّب على نسخة</h3><p>بنجرّب كل حاجة على نسخة من الثيم، ومحدش من عملائك بيشوف حاجة قبل موافقتك.</p></div>
+        <div class="s"><span class="t">03</span><h3>تطلع لايف</h3><p>بعد موافقتك بنطلعها، وبتتابع الطلبات والأرقام من غير ما تكلّم حد.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="band" id="price">
+  <section class="band paper" id="price">
     <div class="wrap">
-      <span class="eyebrow">السعر</span>
-      <h2>اشتراك شهري ثابت</h2>
-      <div class="price">
-        <div class="plan"><span class="who">لحد 500 أوردر في الشهر</span><div class="amt">280 <small>ج.م / شهر</small></div><p>كل حاجة في الصفحة، من غير رسوم على كل طلب.</p></div>
-        <div class="plan"><span class="who">أكتر من 500 أوردر في الشهر</span><div class="amt">390 <small>ج.م / شهر</small></div><p>نفس الصفحة ونفس المميزات للمتاجر الأكبر.</p></div>
+      <span class="eyebrow">الأسعار</span>
+      <h2>اشتراك شهري، ولغيه وقت ما تحب</h2>
+      <div class="ptable">
+        <div class="prow"><h3>GPA Refund &amp; Exchange</h3><div class="amt">280 <small>ج.م/شهر</small></div><p>لو عديت 500 أوردر في الشهر يبقى 390 ج.م.</p></div>
+        <div class="prow"><h3>GPA Size</h3><div class="amt">550 <small>ج.م/شهر</small></div><p>اشتراك ثابت، ومقاسات لكل منتجاتك.</p></div>
+        <div class="prow"><h3>GPA Confirm</h3><div class="amt">320 <small>ج.م/شهر</small></div><div class="tiers"><span>لحد 100 أوردر <b>320</b></span><span>لحد 500 <b>380</b></span><span>لحد 800 <b>420</b></span><span>لحد 1000 <b>590</b></span><span>فوق 1000 <b>620</b></span></div></div>
+        <div class="prow"><h3>GPA Loyalty</h3><div class="amt">450 <small>ج.م/شهر</small></div><p>اشتراك ثابت، وعدد الأعضاء مفتوح.</p></div>
       </div>
+      <p class="note" style="margin-top:14px">عايز أكتر من تطبيق؟ كلّمنا ونظبطلك باكدج. رسايل واتساب GPA Confirm بتتحاسب من Meta على رقم براندك.</p>
     </div>
   </section>
 
-  <section class="band paper">
+  <section class="band" id="faq">
     <div class="wrap">
-      <span class="eyebrow">أسئلة</span>
       <h2>أسئلة بتتكرر</h2>
-      <div style="margin-top:20px">
-        <details><summary>محتاج أعرف برمجة؟</summary><p>لأ. إحنا بنركّبها معاك في المكالمة، وبعدها بتعدّل النصوص والسياسة من Customize عادي.</p></details>
-        <details><summary>الطلبات بتوصل فين؟</summary><p>على إيميل المتجر، وبتتسجل كمان في شيت جوجل علشان يبقى عندك سجل لكل الطلبات.</p></details>
-        <details><summary>العميل لازم يكون عامل حساب؟</summary><p>لأ. يكتب رقم الأوردر وبياناته. ولو عامل حساب ودخل، أوردراته بتظهرله لوحدها.</p></details>
-        <details><summary>هل بتأثر على شكل متجري؟</summary><p>بنركّبها على نسخة من الثيم الأول وتشوفها بلينك Preview. مفيش حاجة بتتغير في متجرك قبل ما توافق.</p></details>
-      </div>
+      <details><summary>محتاج أغيّر الثيم بتاعي؟</summary><p>لأ. كل تطبيق بيتركّب كجزء من الثيم الحالي، وبنجربه على نسخة الأول قبل ما يظهر لعملائك.</p></details>
+      <details><summary>التطبيقات بتشتغل على أي متجر Shopify؟</summary><p>أيوه، على الثيمات الجديدة والقديمة، وبالعربي أو الإنجليزي.</p></details>
+      <details><summary>GPA Confirm بيبعت من رقمي أنا؟</summary><p>أيوه. الرسايل بتطلع من رقم واتساب براندك الرسمي، وبنساعدك تربطه على WhatsApp Business.</p></details>
+      <details><summary>GPA Size محتاج مقاسات كل منتج؟</summary><p>كفاية جدول المقاسات العادي (الطول والعرض). العميل يكتب طوله ووزنه، والمقاس بيتحسب منه.</p></details>
+      <details><summary>لو حبيت أوقف الاشتراك؟</summary><p>بتوقفه وقت ما تحب، من غير عقود ولا مدة إجبارية.</p></details>
     </div>
   </section>
 
   <section class="band final">
     <div class="wrap">
-      <h2>جاهز تريّح نفسك من الواتساب؟</h2>
-      <p class="lead">احجز مكالمة 30 دقيقة ونركّب الصفحة على متجرك.</p>
-      <div class="ctas wa">
+      <h2>جاهز تبيع أكتر وتتعب أقل؟</h2>
+      <p class="lead">احجز مكالمة 15 دقيقة، ونقولك التطبيقات اللي هتفرق مع براندك.</p>
+      <div class="ctas">
         <a class="btn btn--main" href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ11YEoTp_SYa7MoUZKUfnv4kD4lpiJBCSsYaWaPVU2jeeLzbQRAoo0PwLH8cImiU7Nhl1yxF6qz" target="_blank" rel="noopener">احجز مكالمة التركيب ←</a>
-        <a class="btn btn--wa" href="https://wa.me/201038332237?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%AA%D9%81%D8%A7%D8%B5%D9%8A%D9%84%20GPA%20Refund" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>كلّمنا واتساب</a>
+        <a class="btn btn--wa wa" href="https://wa.me/201038332237?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%AA%D9%81%D8%A7%D8%B5%D9%8A%D9%84%20GPA%20Apps" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>كلّمنا واتساب</a>
       </div>
-      <p class="phone">+20 103 833 2237</p>
-      <div class="copyrow">
-        <code id="bookLink">https://calendar.google.com/calendar/appointments/schedules/AcZssZ11YEoTp_SYa7MoUZKUfnv4kD4lpiJBCSsYaWaPVU2jeeLzbQRAoo0PwLH8cImiU7Nhl1yxF6qz</code>
-        <button type="button" class="copybtn" id="copyLink">انسخ رابط الحجز</button>
-      </div>
+      <span class="phone">+20 103 833 2237</span>
     </div>
   </section>
-
-  <footer><div class="wrap">GPA Refund · صفحة استبدال واسترجاع لمتاجر Shopify · واتساب <span class="mono">+20 103 833 2237</span></div></footer>
-  <a class="wa wa-float" href="https://wa.me/201038332237?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%AA%D9%81%D8%A7%D8%B5%D9%8A%D9%84%20GPA%20Refund" target="_blank" rel="noopener" aria-label="كلّمنا على واتساب"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>واتساب</a>
+  <footer><div class="wrap">GPA Apps · Shopify apps for Egyptian &amp; Arab brands</div></footer>
+  <a class="wa wa-float" href="https://wa.me/201038332237?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%AA%D9%81%D8%A7%D8%B5%D9%8A%D9%84%20GPA%20Apps" target="_blank" rel="noopener" aria-label="كلّمنا على واتساب"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>واتساب</a>
 </div>
-
 <script>
-  document.getElementById('copyLink').addEventListener('click', function () {
-    var b = this, t = document.getElementById('bookLink').textContent.trim();
-    function done(ok) { b.textContent = ok ? 'اتنسخ ✓' : 'حدّد الرابط وانسخه'; setTimeout(function () { b.textContent = 'انسخ رابط الحجز'; }, 2200); }
-    try {
-      navigator.clipboard.writeText(t).then(function () { done(true); }, function () { selectIt(); done(false); });
-    } catch (e) { selectIt(); done(false); }
-    function selectIt() { var r = document.createRange(); r.selectNodeContents(document.getElementById('bookLink')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
-  });
+document.querySelectorAll('video').forEach(function (v) { v.addEventListener('play', function () { document.querySelectorAll('video').forEach(function (o) { if (o !== v) o.pause(); }); }); });
 </script>
-
 </body>
 </html>
