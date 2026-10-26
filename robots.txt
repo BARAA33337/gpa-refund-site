@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /size-demo.html
+Disallow: /loyalty-demo.html
+
+Sitemap: https://gpa-refund-site-production.up.railway.app/sitemap.xml
