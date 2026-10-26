@@ -1,0 +1,347 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0"><title>GPA Loyalty Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  :root { --bg: #161616; --fg: #f3f3f3; --muted: #9a9a9a; --line: #333; color-scheme: dark; }
+  body { background: var(--bg); color: var(--fg); font-family: -apple-system, system-ui, 'Segoe UI', sans-serif; }
+  .demo-bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); background: #0d0d0d; border-bottom: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 11; background: #0d0d0d; }
+  .demo-bar b { color: var(--fg); letter-spacing: .04em; }
+  .demo-bar .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .demo-bar .seg button { background: none; border: 0; color: var(--muted); padding: 6px 14px; font: inherit; cursor: pointer; }
+  .demo-bar .seg button[aria-pressed="true"] { background: var(--fg); color: #111; }
+  .demo-bar .seg button:focus-visible { outline: 2px solid var(--fg); outline-offset: -2px; }
+</style>
+<div class="demo-bar"><span><b>GPA Loyalty</b> · معاينة</span><span class="seg" role="group" aria-label="Language"><button type="button" data-l="en" aria-pressed="true">EN</button><button type="button" data-l="ar" aria-pressed="false">عربي</button></span></div>
+<script>
+(function () {
+  var now = new Date(), bm = String(now.getMonth() + 1).padStart(2, '0');
+  var S = { points: 175, lifetime: 425, birthday: '', size: 'L', missions: { signup: 1, first_order: 1 }, claimed: { off10: ['LOYAL10'] }, history: [
+    { type: 'claim', points: -250, note: 'LOYAL10', created_at: '2026-10-21' }, { type: 'mission', points: 100, note: 'Make your first order', created_at: '2026-10-19' },
+    { type: 'order', points: 250, note: '#1042', created_at: '2026-10-19' }, { type: 'order', points: 50, note: '#1007', created_at: '2026-10-02' }, { type: 'mission', points: 25, note: 'Join the club', created_at: '2026-10-01' } ] };
+  var tiers = [{ name: 'Member', min: 0 }, { name: 'Silver', min: 250 }, { name: 'Gold', min: 750 }, { name: 'Black', min: 2000 }];
+  var R = [{ id: 'first', t: '10% off first order', a: 'خصم 10% على أول أوردر', p: 0, k: 'first', code: 'WELCOME10' }, { id: 'birthday', t: 'Birthday 10% off', a: 'خصم 10% في شهر عيد ميلادك', p: 0, k: 'birthday', code: 'BDAY10' }, { id: 'ship', t: 'Free shipping', a: 'شحن مجاني', p: 150, k: 'points', code: 'FREESHIP' }, { id: 'off10', t: '10% off your order', a: 'خصم 10% على الأوردر', p: 250, k: 'points', code: 'LOYAL10' }];
+  var M = [{ id: 'signup', t: 'Join the club', a: 'انضم للنادي', p: 25, type: 'auto' }, { id: 'prefs', t: 'Complete your preferences', a: 'كمّل بياناتك', p: 50, type: 'prefs' }, { id: 'first_order', t: 'Make your first order', a: 'اعمل أول أوردر', p: 100, type: 'auto' }, { id: 'instagram', t: 'Follow us on Instagram', a: 'تابعنا على انستجرام', p: 25, type: 'link', link: 'https://instagram.com' }];
+  function view(lang) {
+    var ar = lang === 'ar', t = tiers[0], next = null; tiers.forEach(function (x, i) { if (S.lifetime >= x.min) { t = x; next = tiers[i + 1] || null; } });
+    return { brand: { name: 'YOUR BRAND', currency: 'EGP', rate: 0.1, tiers: tiers }, member: { name: 'Aa Aaw', points: S.points, lifetime: S.lifetime, joined: '2026-10-01', birthday: S.birthday, prefs: { size: S.size }, orders: 2 },
+      tier: { tier: t.name, next: next && next.name, nextMin: next && next.min, toNext: next ? next.min - S.lifetime : 0, min: t.min },
+      rewards: R.map(function (r) { var codes = (S.claimed[r.id] || []).map(function (c) { return { code: c }; }), av = S.points >= r.p, why = '';
+        if (r.k === 'first') { av = false; why = ar ? 'لأول أوردر بس' : 'First order only'; }
+        if (r.k === 'birthday') { if (!S.birthday || S.birthday.slice(5, 7) !== bm) { av = false; why = ar ? (S.birthday ? 'متاح في شهر عيد ميلادك' : 'ضيف عيد ميلادك في حسابك') : (S.birthday ? 'Available in your birthday month' : 'Add your birthday in Account'); } else if (codes.length) { av = false; why = ar ? 'استخدمته السنة دي' : 'Claimed this year'; } }
+        return { id: r.id, title: ar ? r.a : r.t, desc: '', points: r.p, available: av, why: why, codes: codes }; }),
+      missions: M.map(function (m) { return { id: m.id, title: ar ? m.a : m.t, points: m.p, type: m.type, link: m.link || '', done: !!S.missions[m.id] }; }),
+      history: S.history };
+  }
+  var real = window.fetch;
+  window.fetch = function (url, opt) {
+    if (String(url).indexOf('https://demo.gpa/loyalty') !== 0) return real.apply(this, arguments);
+    var u = String(url), body = opt && opt.body ? JSON.parse(opt.body) : {}, lang = body.lang || (u.match(/lang=(\w+)/) || [])[1];
+    function add(type, pts, note) { S.points += pts; if (pts > 0) S.lifetime += pts; S.history.unshift({ type: type, points: pts, note: note, created_at: new Date().toISOString().slice(0, 10) }); }
+    var out = null;
+    if (u.indexOf('/claim') > 0) { var r = R.filter(function (x) { return x.id === body.reward; })[0], v = view(lang).rewards.filter(function (x) { return x.id === body.reward; })[0];
+      if (v && v.available) { add('claim', -r.p, r.code); (S.claimed[r.id] = S.claimed[r.id] || []).unshift(r.code); out = view(lang); out.claimed = { id: r.id, code: r.code }; } else out = { error: 'not_available', why: v && v.why }; }
+    else if (u.indexOf('/mission') > 0) { var m = M.filter(function (x) { return x.id === body.mission; })[0];
+      if (m && !S.missions[m.id]) { if (m.id === 'prefs') { S.birthday = body.birthday; S.size = body.size; } S.missions[m.id] = 1; add('mission', m.p, m.t); } out = view(lang); }
+    else out = view(lang);
+    return new Promise(function (res) { setTimeout(function () { res(new Response(JSON.stringify(out), { status: out.error ? 400 : 200, headers: { 'Content-Type': 'application/json' } })); }, 250); });
+  };
+})();
+</script><div data-v="en">
+
+<style>
+  #gl-en { --gl-bg: #1f1f1f; --gl-fg: #ffffff; --gl-muted: color-mix(in srgb, var(--gl-fg) 55%, transparent); --gl-line: color-mix(in srgb, var(--gl-fg) 18%, transparent); --gl-soft: color-mix(in srgb, var(--gl-fg) 6%, transparent); --gl-btn: #ffffff; --gl-btn-fg: #111111;
+    background: var(--gl-bg); color: var(--gl-fg); padding: 28px 0 60px; font-family: inherit; }
+  #gl-en * { box-sizing: border-box; }
+  #gl-en .gl-wrap { max-width: 640px; margin: 0 auto; padding: 0 20px; display: grid; gap: 28px; }
+  #gl-en .gl-toast { display: flex; gap: 14px; align-items: center; background: #fff; color: #111; padding: 14px 16px; border-radius: 4px; box-shadow: 0 6px 24px rgba(0,0,0,.12); }
+  #gl-en .gl-toast i { width: 46px; height: 46px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg,#f4f4f4,#bdbdbd); font: italic 700 22px Georgia, serif; color: #333; flex: none; }
+  #gl-en .gl-toast a { color: inherit; }
+  #gl-en .gl-card { position: relative; aspect-ratio: 1.586; border-radius: 18px; padding: 22px 26px; overflow: hidden; color: #2a2a2a; box-shadow: 0 18px 50px rgba(0,0,0,.35); }
+  #gl-en .gl-card[data-t="0"] { background: repeating-linear-gradient(115deg, rgba(255,255,255,.25) 0 2px, transparent 2px 9px), linear-gradient(135deg,#f5f5f5,#cfcfcf 55%,#ececec); }
+  #gl-en .gl-card[data-t="1"] { background: repeating-linear-gradient(115deg, rgba(255,255,255,.22) 0 2px, transparent 2px 9px), linear-gradient(135deg,#e9edf1,#9ea7b0 55%,#dfe4ea); }
+  #gl-en .gl-card[data-t="2"] { background: repeating-linear-gradient(115deg, rgba(255,255,255,.2) 0 2px, transparent 2px 9px), linear-gradient(135deg,#f6e7b8,#c9a24b 55%,#f1dd9c); }
+  #gl-en .gl-card[data-t="3"] { background: repeating-linear-gradient(115deg, rgba(255,255,255,.05) 0 2px, transparent 2px 9px), linear-gradient(135deg,#2b2b2b,#0b0b0b 55%,#333); color: #e9e9e9; }
+  #gl-en .gl-card .n { font-size: 20px; line-height: 1.15; opacity: .8; }
+  #gl-en .gl-card .b { position: absolute; top: 22px; inset-inline-end: 26px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; opacity: .55; font-size: 18px; }
+  #gl-en .gl-card .logo { position: absolute; inset: 0; display: grid; place-items: center; font: italic 700 clamp(70px, 22vw, 120px)/1 Georgia, 'Times New Roman', serif; color: transparent; background: linear-gradient(160deg,#fff,#555 45%,#111 60%,#bbb); -webkit-background-clip: text; background-clip: text; }
+  #gl-en .gl-card .logo img { max-width: 34%; max-height: 40%; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,.25)); }
+  #gl-en .gl-card .pts { position: absolute; bottom: 20px; inset-inline-start: 26px; font-weight: 700; font-size: 14px; letter-spacing: .06em; opacity: .7; }
+  #gl-en h2 { font-size: clamp(28px, 7vw, 40px); font-weight: 400; margin: 0; letter-spacing: -.01em; font-family: Georgia, 'Times New Roman', serif; }
+  #gl-en h2 b { font-family: inherit; font-weight: 700; }
+  #gl-en h3 { font-size: 28px; font-weight: 400; margin: 0; font-family: Georgia, 'Times New Roman', serif; }
+  #gl-en h3 b { font-family: -apple-system, system-ui, sans-serif; font-weight: 700; }
+  #gl-en .gl-bar { height: 10px; border-radius: 10px; background: var(--gl-line); overflow: hidden; }
+  #gl-en .gl-bar i { display: block; height: 100%; background: var(--gl-fg); opacity: .85; border-radius: 10px; transition: width .6s; }
+  #gl-en .gl-row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--gl-muted); flex-wrap: wrap; }
+  #gl-en .gl-row a { color: var(--gl-fg); }
+  #gl-en .gl-tabs { position: sticky; top: 0; z-index: 3; display: flex; gap: 24px; overflow-x: auto; background: var(--gl-bg); padding: 12px 0; border-bottom: 1px solid var(--gl-line); scrollbar-width: none; }
+  #gl-en .gl-tabs button { background: none; border: 0; padding: 4px 0; font: inherit; font-size: 15px; color: var(--gl-muted); cursor: pointer; white-space: nowrap; }
+  #gl-en .gl-tabs button[aria-selected=true] { color: var(--gl-fg); font-weight: 700; }
+  #gl-en .gl-box { border: 1px solid var(--gl-line); padding: 18px 20px; display: grid; gap: 14px; background: var(--gl-soft); }
+  #gl-en .gl-box h4 { margin: 0; font-size: 19px; font-weight: 600; }
+  #gl-en .gl-box small { color: var(--gl-muted); font-size: 14px; }
+  #gl-en .gl-btn { display: block; width: 100%; text-align: center; padding: 15px; font: inherit; font-size: 15px; cursor: pointer; border: 1px solid var(--gl-btn); background: var(--gl-btn); color: var(--gl-btn-fg); text-decoration: none; border-radius: 2px; }
+  #gl-en .gl-btn.ghost { background: transparent; color: var(--gl-fg); border-color: var(--gl-line); }
+  #gl-en .gl-btn:disabled { opacity: .45; cursor: default; }
+  #gl-en .gl-code { display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 1px dashed var(--gl-fg); padding: 10px 12px; font-family: ui-monospace, Menlo, monospace; letter-spacing: .08em; }
+  #gl-en .gl-code button { background: none; border: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; letter-spacing: 0; }
+  #gl-en .gl-prog { display: flex; align-items: center; border: 1px solid var(--gl-line); height: 40px; position: relative; overflow: hidden; }
+  #gl-en .gl-prog i { position: absolute; inset-block: 0; inset-inline-start: 0; background: var(--gl-line); }
+  #gl-en .gl-prog span { position: relative; padding: 0 12px; font-size: 14px; }
+  #gl-en .gl-list { display: grid; gap: 14px; }
+  #gl-en .gl-hist { display: grid; gap: 0; }
+  #gl-en .gl-hist div { display: flex; justify-content: space-between; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--gl-line); font-size: 14px; }
+  #gl-en .gl-hist b { font-variant-numeric: tabular-nums; }
+  #gl-en .gl-hist .p { color: #4caf7d; } #gl-en .gl-hist .m { color: #e07a6a; }
+  #gl-en .gl-f { display: grid; gap: 6px; font-size: 14px; }
+  #gl-en .gl-f input, #gl-en .gl-f select { background: transparent; color: var(--gl-fg); border: 1px solid var(--gl-line); padding: 12px; font: inherit; border-radius: 2px; }
+  #gl-en .gl-tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+  #gl-en .gl-tiers div { border: 1px solid var(--gl-line); padding: 12px; font-size: 13px; color: var(--gl-muted); }
+  #gl-en .gl-tiers div.on { border-color: var(--gl-fg); color: var(--gl-fg); }
+  #gl-en .gl-tiers b { display: block; font-size: 15px; color: var(--gl-fg); }
+  #gl-en [hidden] { display: none !important; }
+  #gl-en .gl-muted { color: var(--gl-muted); font-size: 14px; margin: 0; }
+  #gl-en .gl-skel { height: 200px; border-radius: 18px; background: var(--gl-soft); }
+</style>
+
+<div id="gl-en" dir="ltr">
+  <div class="gl-wrap" data-gl-root>
+    
+      <div class="gl-skel" data-gl-loading></div>
+    
+  </div>
+  
+  <script type="application/json" data-gl-config>{
+    "api": "https://demo.gpa/loyalty", "cid": "1", "sig": "demo",
+    "email": "aa@example.com", "name": "Aa", "last": "Aaw",
+    "lang": "en", "club": "Prestige", "shop": "YOUR BRAND",
+    "logo": "",
+    "currency": "EGP"
+  }</script>
+  <script>
+  (function () {
+    var host = document.getElementById("gl-en"); if (!host || host.__gl) return; host.__gl = 1;
+    var C = JSON.parse(host.querySelector('[data-gl-config]').textContent), AR = C.lang === 'ar', root = host.querySelector('[data-gl-root]');
+    var T = AR ? { have: 'عندك', avail: 'نقطة متاحة', view: 'افتح الداشبورد', member: 'عضو', welcome: 'أهلًا تاني', until: 'نقطة إجمالية لحد المستوى الجاي', top: 'انت في أعلى مستوى', tiers: 'كل المستويات', dash: 'الرئيسية', mr: 'المهام والمكافآت', orders: 'الأوردرات', account: 'الحساب', claim: 'استبدل بـ', points: 'نقطة', free: 'مجانًا', rewards: 'المكافآت', go_r: 'كل المكافآت', missions: 'المهام', latest: 'آخر', go_m: 'كل المهام', done: 'اتعملت ✓', doit: 'اعملها', how: 'إزاي تكسب', hist: 'سجل النقاط', none: 'لسه مفيش حركة.', bd: 'تاريخ عيد ميلادك', size: 'مقاسك', save: 'احفظ', saved: 'اتحفظ ✓', copy: 'نسخ', copied: 'اتنسخ ✓', yourcodes: 'أكوادك', earn: 'كل {r} = نقطة على كل أوردر', joined: 'عضو من', since: '', orderPts: 'أوردر', mission: 'مهمة', claimEv: 'استبدال', adjust: 'تعديل', refund: 'مرتجع', err: 'حصلت مشكلة، جرّب تاني', bdLocked: 'عيد الميلاد مينفعش يتغير بعد ما يتحفظ' }
+      : { have: 'you have', avail: 'Points Available', view: 'View Dashboard', member: 'Member', welcome: 'Welcome back', until: 'Lifetime points until next tier', top: "You're at the top tier", tiers: 'All membership tiers', dash: 'Dashboard', mr: 'Missions & Rewards', orders: 'Orders', account: 'Account', claim: 'Claim for', points: 'points', free: 'Claim for free', rewards: 'Rewards', go_r: 'Go to rewards', missions: 'Missions', latest: 'Latest', go_m: 'Go to missions', done: 'Completed ✓', doit: 'Do it', how: 'How to earn', hist: 'Points history', none: 'No activity yet.', bd: 'Your birthday', size: 'Your size', save: 'Save', saved: 'Saved ✓', copy: 'Copy', copied: 'Copied ✓', yourcodes: 'Your codes', earn: '1 point for every {r} spent', joined: 'Member since', since: '', orderPts: 'Order', mission: 'Mission', claimEv: 'Reward claimed', adjust: 'Adjustment', refund: 'Refund', err: 'Something went wrong, try again', bdLocked: "Birthday can't be changed once saved" };
+    var D = null, tab = 'dash';
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function q(extra) { var p = { cid: C.cid, sig: C.sig, email: C.email, name: [C.name, C.last].filter(Boolean).join(' '), lang: C.lang }; for (var k in extra) p[k] = extra[k]; return p; }
+    function call(path, body) {
+      var url = C.api + path, opt = {};
+      if (body) { opt = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(q(body)) }; }
+      else url += '?' + Object.keys(q({})).map(function (k) { return k + '=' + encodeURIComponent(q({})[k] || ''); }).join('&');
+      return fetch(url, opt).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw j; return j; }); });
+    }
+    function tIdx() { var ts = D.brand.tiers || [], i = 0; ts.forEach(function (t, k) { if (t.name === D.tier.tier) i = k; }); return Math.min(3, i); }
+    function card() {
+      return '<div class="gl-card" data-t="' + tIdx() + '"><span class="n">' + esc(D.member.name || C.name || '') + '<br>' + esc(D.tier.tier) + ' ' + (AR ? '' : T.member) + '</span><span class="b">' + esc(C.shop) + '</span><div class="logo">' + (C.logo ? '<img src="' + esc(C.logo) + '" alt="">' : esc(String(C.shop || 'G').charAt(0))) + '</div><span class="pts">' + D.member.points + ' ' + (AR ? 'نقطة' : 'PTS') + '</span></div>';
+    }
+    function progress() {
+      var t = D.tier, life = D.member.lifetime;
+      if (!t.next) return '<div class="gl-bar"><i style="width:100%"></i></div><div class="gl-row"><span>' + T.top + '</span></div>';
+      var pct = Math.min(100, Math.round((life - t.min) / Math.max(1, t.nextMin - t.min) * 100));
+      return '<div class="gl-bar"><i style="width:' + pct + '%"></i></div><div class="gl-row"><span>' + life + ' / ' + t.nextMin + ' ' + T.until + ' (' + esc(t.next) + ')</span><a href="#" data-go="account">' + T.tiers + '</a></div>';
+    }
+    function reward(r) {
+      var codes = r.codes.length ? '<div class="gl-muted">' + T.yourcodes + '</div>' + r.codes.slice(0, 2).map(function (c) { return '<div class="gl-code"><span>' + esc(c.code) + '</span><button type="button" data-copy="' + esc(c.code) + '">' + T.copy + '</button></div>'; }).join('') : '';
+      return '<div class="gl-box"><h4>' + esc(r.title) + '</h4>' + (r.desc ? '<small>' + esc(r.desc) + '</small>' : '') + codes +
+        '<button type="button" class="gl-btn" data-claim="' + esc(r.id) + '"' + (r.available ? '' : ' disabled') + '>' + (r.available ? (r.points ? T.claim + ' ' + r.points + ' ' + T.points : T.free) : esc(r.why || (T.claim + ' ' + r.points + ' ' + T.points))) + '</button></div>';
+    }
+    function mission(m) {
+      var body = '';
+      if (m.type === 'link' && !m.done) body = m.link ? '<a class="gl-btn ghost" href="' + esc(m.link) + '" target="_blank" rel="noopener" data-mission="' + esc(m.id) + '">' + T.doit + '</a>' : '';
+      if (m.type === 'prefs' && !m.done) body = '<button type="button" class="gl-btn ghost" data-go="account">' + T.doit + '</button>';
+      return '<div class="gl-box"><h4>' + esc(m.title) + '</h4><small>+ ' + m.points + ' ' + T.points + '</small><div class="gl-prog"><i style="width:' + (m.done ? 100 : 0) + '%"></i><span>' + (m.done ? '100%' : '0%') + '</span></div>' + body + '</div>';
+    }
+    function history() {
+      var L = { order: T.orderPts, mission: T.mission, claim: T.claimEv, adjust: T.adjust, refund: T.refund };
+      return D.history.length ? '<div class="gl-hist">' + D.history.map(function (h) { return '<div><span>' + esc(L[h.type] || h.type) + (h.note ? ' · ' + esc(h.note) : '') + '<br><small class="gl-muted">' + esc(String(h.created_at).slice(0, 10)) + '</small></span><b class="' + (h.points >= 0 ? 'p' : 'm') + '" dir="ltr">' + (h.points > 0 ? '+' : '') + h.points + '</b></div>'; }).join('') + '</div>' : '<p class="gl-muted">' + T.none + '</p>';
+    }
+    function render() {
+      var first = (C.name || D.member.name || '').split(' ')[0];
+      var html = '<div class="gl-toast"><i>' + esc(String(C.shop || 'G').charAt(0)) + '</i><div><b>' + esc(first) + (AR ? '، ' : ', ') + T.have + ' ' + D.member.points + '</b> ' + T.avail + '<br><a href="#" data-go="dash">' + T.view + '</a></div></div>' +
+        '<div class="gl-tabs" role="tablist">' + [['dash', T.dash], ['mr', T.mr], ['orders', T.orders], ['account', T.account]].map(function (x) { return '<button type="button" role="tab" data-tab="' + x[0] + '" aria-selected="' + (tab === x[0]) + '">' + x[1] + '</button>'; }).join('') + '</div>';
+      if (tab === 'dash') html += card() + '<h2>' + T.welcome + ' <b>' + esc(first) + '</b></h2>' + progress() +
+        '<h3>' + (AR ? 'آخر <b>المكافآت</b>' : '<b>Latest</b> Rewards') + '</h3><div class="gl-list">' + D.rewards.slice(0, 2).map(reward).join('') + '</div><button type="button" class="gl-btn ghost" data-tab="mr">' + T.go_r + '</button>' +
+        '<h3>' + (AR ? 'آخر <b>المهام</b>' : '<b>Latest</b> Missions') + '</h3><div class="gl-list">' + D.missions.filter(function (m) { return !m.done; }).concat(D.missions.filter(function (m) { return m.done; })).slice(0, 2).map(mission).join('') + '</div><button type="button" class="gl-btn ghost" data-tab="mr">' + T.go_m + '</button>';
+      if (tab === 'mr') html += '<h3>' + T.rewards + '</h3><div class="gl-list">' + D.rewards.map(reward).join('') + '</div><h3>' + T.missions + '</h3><p class="gl-muted">' + T.earn.replace('{r}', Math.round(1 / (D.brand.rate || 0.1)) + ' ' + esc(C.currency || '')) + '</p><div class="gl-list">' + D.missions.map(mission).join('') + '</div>';
+      if (tab === 'orders') html += '<h3>' + T.hist + '</h3>' + history();
+      if (tab === 'account') html += card() + '<p class="gl-muted">' + T.joined + ' ' + esc(String(D.member.joined).slice(0, 10)) + '</p>' +
+        '<form class="gl-box" data-prefs><h4>' + T.account + '</h4><label class="gl-f">' + T.bd + '<input type="date" name="birthday" value="' + esc(D.member.birthday) + '"' + (D.member.birthday ? ' disabled' : '') + ' required></label><label class="gl-f">' + T.size + '<select name="size">' + ['', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'].map(function (s) { return '<option' + ((D.member.prefs || {}).size === s ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select></label>' + (D.member.birthday ? '<p class="gl-muted">' + T.bdLocked + '</p>' : '<button class="gl-btn" type="submit">' + T.save + '</button>') + '</form>' +
+        '<h3>' + T.tiers + '</h3><div class="gl-tiers">' + D.brand.tiers.map(function (t) { return '<div class="' + (t.name === D.tier.tier ? 'on' : '') + '"><b>' + esc(t.name) + '</b>' + t.min + '+ ' + T.points + '</div>'; }).join('') + '</div>';
+      root.innerHTML = html;
+    }
+    function load() { return call('/me').then(function (d) { D = d; render(); }).catch(function () { root.innerHTML = '<p class="gl-muted">' + T.err + '</p>'; }); }
+    root.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-tab],[data-go],[data-claim],[data-copy],[data-mission]'); if (!t) return;
+      if (t.hasAttribute('data-tab') || t.hasAttribute('data-go')) { e.preventDefault(); tab = t.getAttribute('data-tab') || t.getAttribute('data-go'); render(); root.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+      if (t.hasAttribute('data-copy')) { var c = t.getAttribute('data-copy'); (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject()).then(function () { t.textContent = T.copied; }, function () {}); return; }
+      if (t.hasAttribute('data-claim')) { t.disabled = true; call('/claim', { reward: t.getAttribute('data-claim') }).then(function (d) { D = d; render(); }).catch(function (er) { t.disabled = false; alert((er && er.why) || T.err); }); return; }
+      if (t.hasAttribute('data-mission')) { call('/mission', { mission: t.getAttribute('data-mission') }).then(function (d) { D = d; setTimeout(render, 400); }).catch(function () {}); }
+    });
+    root.addEventListener('submit', function (e) {
+      if (!e.target.hasAttribute('data-prefs')) return; e.preventDefault();
+      var f = e.target, b = f.querySelector('button'); if (b) b.disabled = true;
+      call('/mission', { mission: 'prefs', birthday: f.birthday.value, size: f.size.value }).then(function (d) { D = d; render(); }).catch(function () { if (b) b.disabled = false; alert(T.err); });
+    });
+    if (location.hash === '#rewards') tab = 'mr';
+    load();
+  })();
+  </script>
+  
+</div>
+
+</div><div data-v="ar" hidden>
+
+<style>
+  #gl-ar { --gl-bg: #1f1f1f; --gl-fg: #ffffff; --gl-muted: color-mix(in srgb, var(--gl-fg) 55%, transparent); --gl-line: color-mix(in srgb, var(--gl-fg) 18%, transparent); --gl-soft: color-mix(in srgb, var(--gl-fg) 6%, transparent); --gl-btn: #ffffff; --gl-btn-fg: #111111;
+    background: var(--gl-bg); color: var(--gl-fg); padding: 28px 0 60px; font-family: inherit; }
+  #gl-ar * { box-sizing: border-box; }
+  #gl-ar .gl-wrap { max-width: 640px; margin: 0 auto; padding: 0 20px; display: grid; gap: 28px; }
+  #gl-ar .gl-toast { display: flex; gap: 14px; align-items: center; background: #fff; color: #111; padding: 14px 16px; border-radius: 4px; box-shadow: 0 6px 24px rgba(0,0,0,.12); }
+  #gl-ar .gl-toast i { width: 46px; height: 46px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg,#f4f4f4,#bdbdbd); font: italic 700 22px Georgia, serif; color: #333; flex: none; }
+  #gl-ar .gl-toast a { color: inherit; }
+  #gl-ar .gl-card { position: relative; aspect-ratio: 1.586; border-radius: 18px; padding: 22px 26px; overflow: hidden; color: #2a2a2a; box-shadow: 0 18px 50px rgba(0,0,0,.35); }
+  #gl-ar .gl-card[data-t="0"] { background: repeating-linear-gradient(115deg, rgba(255,255,255,.25) 0 2px, transparent 2px 9px), linear-gradient(135deg,#f5f5f5,#cfcfcf 55%,#ececec); }
+  #gl-ar .gl-card[data-t="1"] { background: repeating-linear-gradient(115deg, rgba(255,255,255,.22) 0 2px, transparent 2px 9px), linear-gradient(135deg,#e9edf1,#9ea7b0 55%,#dfe4ea); }
+  #gl-ar .gl-card[data-t="2"] { background: repeating-linear-gradient(115deg, rgba(255,255,255,.2) 0 2px, transparent 2px 9px), linear-gradient(135deg,#f6e7b8,#c9a24b 55%,#f1dd9c); }
+  #gl-ar .gl-card[data-t="3"] { background: repeating-linear-gradient(115deg, rgba(255,255,255,.05) 0 2px, transparent 2px 9px), linear-gradient(135deg,#2b2b2b,#0b0b0b 55%,#333); color: #e9e9e9; }
+  #gl-ar .gl-card .n { font-size: 20px; line-height: 1.15; opacity: .8; }
+  #gl-ar .gl-card .b { position: absolute; top: 22px; inset-inline-end: 26px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; opacity: .55; font-size: 18px; }
+  #gl-ar .gl-card .logo { position: absolute; inset: 0; display: grid; place-items: center; font: italic 700 clamp(70px, 22vw, 120px)/1 Georgia, 'Times New Roman', serif; color: transparent; background: linear-gradient(160deg,#fff,#555 45%,#111 60%,#bbb); -webkit-background-clip: text; background-clip: text; }
+  #gl-ar .gl-card .logo img { max-width: 34%; max-height: 40%; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,.25)); }
+  #gl-ar .gl-card .pts { position: absolute; bottom: 20px; inset-inline-start: 26px; font-weight: 700; font-size: 14px; letter-spacing: .06em; opacity: .7; }
+  #gl-ar h2 { font-size: clamp(28px, 7vw, 40px); font-weight: 400; margin: 0; letter-spacing: -.01em; font-family: Georgia, 'Times New Roman', serif; }
+  #gl-ar h2 b { font-family: inherit; font-weight: 700; }
+  #gl-ar h3 { font-size: 28px; font-weight: 400; margin: 0; font-family: Georgia, 'Times New Roman', serif; }
+  #gl-ar h3 b { font-family: -apple-system, system-ui, sans-serif; font-weight: 700; }
+  #gl-ar .gl-bar { height: 10px; border-radius: 10px; background: var(--gl-line); overflow: hidden; }
+  #gl-ar .gl-bar i { display: block; height: 100%; background: var(--gl-fg); opacity: .85; border-radius: 10px; transition: width .6s; }
+  #gl-ar .gl-row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--gl-muted); flex-wrap: wrap; }
+  #gl-ar .gl-row a { color: var(--gl-fg); }
+  #gl-ar .gl-tabs { position: sticky; top: 0; z-index: 3; display: flex; gap: 24px; overflow-x: auto; background: var(--gl-bg); padding: 12px 0; border-bottom: 1px solid var(--gl-line); scrollbar-width: none; }
+  #gl-ar .gl-tabs button { background: none; border: 0; padding: 4px 0; font: inherit; font-size: 15px; color: var(--gl-muted); cursor: pointer; white-space: nowrap; }
+  #gl-ar .gl-tabs button[aria-selected=true] { color: var(--gl-fg); font-weight: 700; }
+  #gl-ar .gl-box { border: 1px solid var(--gl-line); padding: 18px 20px; display: grid; gap: 14px; background: var(--gl-soft); }
+  #gl-ar .gl-box h4 { margin: 0; font-size: 19px; font-weight: 600; }
+  #gl-ar .gl-box small { color: var(--gl-muted); font-size: 14px; }
+  #gl-ar .gl-btn { display: block; width: 100%; text-align: center; padding: 15px; font: inherit; font-size: 15px; cursor: pointer; border: 1px solid var(--gl-btn); background: var(--gl-btn); color: var(--gl-btn-fg); text-decoration: none; border-radius: 2px; }
+  #gl-ar .gl-btn.ghost { background: transparent; color: var(--gl-fg); border-color: var(--gl-line); }
+  #gl-ar .gl-btn:disabled { opacity: .45; cursor: default; }
+  #gl-ar .gl-code { display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 1px dashed var(--gl-fg); padding: 10px 12px; font-family: ui-monospace, Menlo, monospace; letter-spacing: .08em; }
+  #gl-ar .gl-code button { background: none; border: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; letter-spacing: 0; }
+  #gl-ar .gl-prog { display: flex; align-items: center; border: 1px solid var(--gl-line); height: 40px; position: relative; overflow: hidden; }
+  #gl-ar .gl-prog i { position: absolute; inset-block: 0; inset-inline-start: 0; background: var(--gl-line); }
+  #gl-ar .gl-prog span { position: relative; padding: 0 12px; font-size: 14px; }
+  #gl-ar .gl-list { display: grid; gap: 14px; }
+  #gl-ar .gl-hist { display: grid; gap: 0; }
+  #gl-ar .gl-hist div { display: flex; justify-content: space-between; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--gl-line); font-size: 14px; }
+  #gl-ar .gl-hist b { font-variant-numeric: tabular-nums; }
+  #gl-ar .gl-hist .p { color: #4caf7d; } #gl-ar .gl-hist .m { color: #e07a6a; }
+  #gl-ar .gl-f { display: grid; gap: 6px; font-size: 14px; }
+  #gl-ar .gl-f input, #gl-ar .gl-f select { background: transparent; color: var(--gl-fg); border: 1px solid var(--gl-line); padding: 12px; font: inherit; border-radius: 2px; }
+  #gl-ar .gl-tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+  #gl-ar .gl-tiers div { border: 1px solid var(--gl-line); padding: 12px; font-size: 13px; color: var(--gl-muted); }
+  #gl-ar .gl-tiers div.on { border-color: var(--gl-fg); color: var(--gl-fg); }
+  #gl-ar .gl-tiers b { display: block; font-size: 15px; color: var(--gl-fg); }
+  #gl-ar [hidden] { display: none !important; }
+  #gl-ar .gl-muted { color: var(--gl-muted); font-size: 14px; margin: 0; }
+  #gl-ar .gl-skel { height: 200px; border-radius: 18px; background: var(--gl-soft); }
+</style>
+
+<div id="gl-ar" dir="rtl">
+  <div class="gl-wrap" data-gl-root>
+    
+      <div class="gl-skel" data-gl-loading></div>
+    
+  </div>
+  
+  <script type="application/json" data-gl-config>{
+    "api": "https://demo.gpa/loyalty", "cid": "1", "sig": "demo",
+    "email": "aa@example.com", "name": "Aa", "last": "Aaw",
+    "lang": "ar", "club": "Prestige", "shop": "YOUR BRAND",
+    "logo": "",
+    "currency": "EGP"
+  }</script>
+  <script>
+  (function () {
+    var host = document.getElementById("gl-ar"); if (!host || host.__gl) return; host.__gl = 1;
+    var C = JSON.parse(host.querySelector('[data-gl-config]').textContent), AR = C.lang === 'ar', root = host.querySelector('[data-gl-root]');
+    var T = AR ? { have: 'عندك', avail: 'نقطة متاحة', view: 'افتح الداشبورد', member: 'عضو', welcome: 'أهلًا تاني', until: 'نقطة إجمالية لحد المستوى الجاي', top: 'انت في أعلى مستوى', tiers: 'كل المستويات', dash: 'الرئيسية', mr: 'المهام والمكافآت', orders: 'الأوردرات', account: 'الحساب', claim: 'استبدل بـ', points: 'نقطة', free: 'مجانًا', rewards: 'المكافآت', go_r: 'كل المكافآت', missions: 'المهام', latest: 'آخر', go_m: 'كل المهام', done: 'اتعملت ✓', doit: 'اعملها', how: 'إزاي تكسب', hist: 'سجل النقاط', none: 'لسه مفيش حركة.', bd: 'تاريخ عيد ميلادك', size: 'مقاسك', save: 'احفظ', saved: 'اتحفظ ✓', copy: 'نسخ', copied: 'اتنسخ ✓', yourcodes: 'أكوادك', earn: 'كل {r} = نقطة على كل أوردر', joined: 'عضو من', since: '', orderPts: 'أوردر', mission: 'مهمة', claimEv: 'استبدال', adjust: 'تعديل', refund: 'مرتجع', err: 'حصلت مشكلة، جرّب تاني', bdLocked: 'عيد الميلاد مينفعش يتغير بعد ما يتحفظ' }
+      : { have: 'you have', avail: 'Points Available', view: 'View Dashboard', member: 'Member', welcome: 'Welcome back', until: 'Lifetime points until next tier', top: "You're at the top tier", tiers: 'All membership tiers', dash: 'Dashboard', mr: 'Missions & Rewards', orders: 'Orders', account: 'Account', claim: 'Claim for', points: 'points', free: 'Claim for free', rewards: 'Rewards', go_r: 'Go to rewards', missions: 'Missions', latest: 'Latest', go_m: 'Go to missions', done: 'Completed ✓', doit: 'Do it', how: 'How to earn', hist: 'Points history', none: 'No activity yet.', bd: 'Your birthday', size: 'Your size', save: 'Save', saved: 'Saved ✓', copy: 'Copy', copied: 'Copied ✓', yourcodes: 'Your codes', earn: '1 point for every {r} spent', joined: 'Member since', since: '', orderPts: 'Order', mission: 'Mission', claimEv: 'Reward claimed', adjust: 'Adjustment', refund: 'Refund', err: 'Something went wrong, try again', bdLocked: "Birthday can't be changed once saved" };
+    var D = null, tab = 'dash';
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function q(extra) { var p = { cid: C.cid, sig: C.sig, email: C.email, name: [C.name, C.last].filter(Boolean).join(' '), lang: C.lang }; for (var k in extra) p[k] = extra[k]; return p; }
+    function call(path, body) {
+      var url = C.api + path, opt = {};
+      if (body) { opt = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(q(body)) }; }
+      else url += '?' + Object.keys(q({})).map(function (k) { return k + '=' + encodeURIComponent(q({})[k] || ''); }).join('&');
+      return fetch(url, opt).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw j; return j; }); });
+    }
+    function tIdx() { var ts = D.brand.tiers || [], i = 0; ts.forEach(function (t, k) { if (t.name === D.tier.tier) i = k; }); return Math.min(3, i); }
+    function card() {
+      return '<div class="gl-card" data-t="' + tIdx() + '"><span class="n">' + esc(D.member.name || C.name || '') + '<br>' + esc(D.tier.tier) + ' ' + (AR ? '' : T.member) + '</span><span class="b">' + esc(C.shop) + '</span><div class="logo">' + (C.logo ? '<img src="' + esc(C.logo) + '" alt="">' : esc(String(C.shop || 'G').charAt(0))) + '</div><span class="pts">' + D.member.points + ' ' + (AR ? 'نقطة' : 'PTS') + '</span></div>';
+    }
+    function progress() {
+      var t = D.tier, life = D.member.lifetime;
+      if (!t.next) return '<div class="gl-bar"><i style="width:100%"></i></div><div class="gl-row"><span>' + T.top + '</span></div>';
+      var pct = Math.min(100, Math.round((life - t.min) / Math.max(1, t.nextMin - t.min) * 100));
+      return '<div class="gl-bar"><i style="width:' + pct + '%"></i></div><div class="gl-row"><span>' + life + ' / ' + t.nextMin + ' ' + T.until + ' (' + esc(t.next) + ')</span><a href="#" data-go="account">' + T.tiers + '</a></div>';
+    }
+    function reward(r) {
+      var codes = r.codes.length ? '<div class="gl-muted">' + T.yourcodes + '</div>' + r.codes.slice(0, 2).map(function (c) { return '<div class="gl-code"><span>' + esc(c.code) + '</span><button type="button" data-copy="' + esc(c.code) + '">' + T.copy + '</button></div>'; }).join('') : '';
+      return '<div class="gl-box"><h4>' + esc(r.title) + '</h4>' + (r.desc ? '<small>' + esc(r.desc) + '</small>' : '') + codes +
+        '<button type="button" class="gl-btn" data-claim="' + esc(r.id) + '"' + (r.available ? '' : ' disabled') + '>' + (r.available ? (r.points ? T.claim + ' ' + r.points + ' ' + T.points : T.free) : esc(r.why || (T.claim + ' ' + r.points + ' ' + T.points))) + '</button></div>';
+    }
+    function mission(m) {
+      var body = '';
+      if (m.type === 'link' && !m.done) body = m.link ? '<a class="gl-btn ghost" href="' + esc(m.link) + '" target="_blank" rel="noopener" data-mission="' + esc(m.id) + '">' + T.doit + '</a>' : '';
+      if (m.type === 'prefs' && !m.done) body = '<button type="button" class="gl-btn ghost" data-go="account">' + T.doit + '</button>';
+      return '<div class="gl-box"><h4>' + esc(m.title) + '</h4><small>+ ' + m.points + ' ' + T.points + '</small><div class="gl-prog"><i style="width:' + (m.done ? 100 : 0) + '%"></i><span>' + (m.done ? '100%' : '0%') + '</span></div>' + body + '</div>';
+    }
+    function history() {
+      var L = { order: T.orderPts, mission: T.mission, claim: T.claimEv, adjust: T.adjust, refund: T.refund };
+      return D.history.length ? '<div class="gl-hist">' + D.history.map(function (h) { return '<div><span>' + esc(L[h.type] || h.type) + (h.note ? ' · ' + esc(h.note) : '') + '<br><small class="gl-muted">' + esc(String(h.created_at).slice(0, 10)) + '</small></span><b class="' + (h.points >= 0 ? 'p' : 'm') + '" dir="ltr">' + (h.points > 0 ? '+' : '') + h.points + '</b></div>'; }).join('') + '</div>' : '<p class="gl-muted">' + T.none + '</p>';
+    }
+    function render() {
+      var first = (C.name || D.member.name || '').split(' ')[0];
+      var html = '<div class="gl-toast"><i>' + esc(String(C.shop || 'G').charAt(0)) + '</i><div><b>' + esc(first) + (AR ? '، ' : ', ') + T.have + ' ' + D.member.points + '</b> ' + T.avail + '<br><a href="#" data-go="dash">' + T.view + '</a></div></div>' +
+        '<div class="gl-tabs" role="tablist">' + [['dash', T.dash], ['mr', T.mr], ['orders', T.orders], ['account', T.account]].map(function (x) { return '<button type="button" role="tab" data-tab="' + x[0] + '" aria-selected="' + (tab === x[0]) + '">' + x[1] + '</button>'; }).join('') + '</div>';
+      if (tab === 'dash') html += card() + '<h2>' + T.welcome + ' <b>' + esc(first) + '</b></h2>' + progress() +
+        '<h3>' + (AR ? 'آخر <b>المكافآت</b>' : '<b>Latest</b> Rewards') + '</h3><div class="gl-list">' + D.rewards.slice(0, 2).map(reward).join('') + '</div><button type="button" class="gl-btn ghost" data-tab="mr">' + T.go_r + '</button>' +
+        '<h3>' + (AR ? 'آخر <b>المهام</b>' : '<b>Latest</b> Missions') + '</h3><div class="gl-list">' + D.missions.filter(function (m) { return !m.done; }).concat(D.missions.filter(function (m) { return m.done; })).slice(0, 2).map(mission).join('') + '</div><button type="button" class="gl-btn ghost" data-tab="mr">' + T.go_m + '</button>';
+      if (tab === 'mr') html += '<h3>' + T.rewards + '</h3><div class="gl-list">' + D.rewards.map(reward).join('') + '</div><h3>' + T.missions + '</h3><p class="gl-muted">' + T.earn.replace('{r}', Math.round(1 / (D.brand.rate || 0.1)) + ' ' + esc(C.currency || '')) + '</p><div class="gl-list">' + D.missions.map(mission).join('') + '</div>';
+      if (tab === 'orders') html += '<h3>' + T.hist + '</h3>' + history();
+      if (tab === 'account') html += card() + '<p class="gl-muted">' + T.joined + ' ' + esc(String(D.member.joined).slice(0, 10)) + '</p>' +
+        '<form class="gl-box" data-prefs><h4>' + T.account + '</h4><label class="gl-f">' + T.bd + '<input type="date" name="birthday" value="' + esc(D.member.birthday) + '"' + (D.member.birthday ? ' disabled' : '') + ' required></label><label class="gl-f">' + T.size + '<select name="size">' + ['', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'].map(function (s) { return '<option' + ((D.member.prefs || {}).size === s ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select></label>' + (D.member.birthday ? '<p class="gl-muted">' + T.bdLocked + '</p>' : '<button class="gl-btn" type="submit">' + T.save + '</button>') + '</form>' +
+        '<h3>' + T.tiers + '</h3><div class="gl-tiers">' + D.brand.tiers.map(function (t) { return '<div class="' + (t.name === D.tier.tier ? 'on' : '') + '"><b>' + esc(t.name) + '</b>' + t.min + '+ ' + T.points + '</div>'; }).join('') + '</div>';
+      root.innerHTML = html;
+    }
+    function load() { return call('/me').then(function (d) { D = d; render(); }).catch(function () { root.innerHTML = '<p class="gl-muted">' + T.err + '</p>'; }); }
+    root.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-tab],[data-go],[data-claim],[data-copy],[data-mission]'); if (!t) return;
+      if (t.hasAttribute('data-tab') || t.hasAttribute('data-go')) { e.preventDefault(); tab = t.getAttribute('data-tab') || t.getAttribute('data-go'); render(); root.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+      if (t.hasAttribute('data-copy')) { var c = t.getAttribute('data-copy'); (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject()).then(function () { t.textContent = T.copied; }, function () {}); return; }
+      if (t.hasAttribute('data-claim')) { t.disabled = true; call('/claim', { reward: t.getAttribute('data-claim') }).then(function (d) { D = d; render(); }).catch(function (er) { t.disabled = false; alert((er && er.why) || T.err); }); return; }
+      if (t.hasAttribute('data-mission')) { call('/mission', { mission: t.getAttribute('data-mission') }).then(function (d) { D = d; setTimeout(render, 400); }).catch(function () {}); }
+    });
+    root.addEventListener('submit', function (e) {
+      if (!e.target.hasAttribute('data-prefs')) return; e.preventDefault();
+      var f = e.target, b = f.querySelector('button'); if (b) b.disabled = true;
+      call('/mission', { mission: 'prefs', birthday: f.birthday.value, size: f.size.value }).then(function (d) { D = d; render(); }).catch(function () { if (b) b.disabled = false; alert(T.err); });
+    });
+    if (location.hash === '#rewards') tab = 'mr';
+    load();
+  })();
+  </script>
+  
+</div>
+
+</div>
+<script>
+document.querySelector('.demo-bar .seg').addEventListener('click', function (e) { var b = e.target.closest('[data-l]'); if (!b) return; var l = b.getAttribute('data-l');
+  document.querySelectorAll('.demo-bar [data-l]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+  document.querySelectorAll('[data-v]').forEach(function (x) { x.hidden = x.getAttribute('data-v') !== l; }); });
+window.alert = function (m) { console.log(m); };
+</script></body></html>

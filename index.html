@@ -182,6 +182,12 @@
   .tiers span { border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font-size: 13px; color: var(--muted); }
   .tiers span b { color: var(--ink); font-variant-numeric: tabular-nums; }
   @media (max-width: 760px) { .prow { grid-template-columns: 1fr; gap: 8px; } }
+  .app .more { font: 600 15px var(--body); color: var(--accent); text-decoration: none; }
+  .app .more::after { content: ""; position: absolute; inset: 0; border-radius: 22px; }
+  .app { transition: transform .15s ease, border-color .15s ease; }
+  .app:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .app:focus-within { border-color: var(--accent); }
+  @media (prefers-reduced-motion: reduce) { .app, .app:hover { transition: none; transform: none; } }
 </style>
 
 </head>
@@ -207,7 +213,7 @@
         </div>
         <p class="note">التركيب علينا، ومن غير ما تغيّر الثيم بتاعك.</p>
       </div>
-      <div class="device"><video src="promo-voice.mp4" poster="promo-voice.jpg" controls playsinline preload="metadata" aria-label="فيديو GPA Refund"></video></div>
+      <div class="device"><video src="promo-apps.mp4" poster="promo-apps.jpg" controls playsinline preload="metadata" aria-label="فيديو GPA Apps"></video></div>
     </div>
   </section>
 
@@ -222,6 +228,7 @@
           <h3>GPA Refund &amp; Exchange</h3>
           <p class="q">العميل عايز يبدّل؟ بدل رسايل وصور على الواتساب، يملا صفحة واحدة في دقيقة.</p>
           <ul><li>بيانات الأوردر بتيجي لوحدها من رقم الطلب</li><li>صور المشكلة، والمقاس الجديد، وطريقة رد الفلوس</li><li>كل طلب يوصلك مرتب على الإيميل</li></ul>
+        <a class="more" href="refund.html">اعرف أكتر وجرّب ←</a>
         </article>
         <article class="app" data-a="size">
           <span class="pr"><b>550</b> ج.م/شهر</span>
@@ -229,6 +236,7 @@
           <h3>GPA Size</h3>
           <p class="q">نص المرتجعات سببها المقاس. خلّي العميل يعرف مقاسه قبل ما يشتري.</p>
           <ul><li>طوله ووزنه وستايله، ويطلعله المقاس المناسب</li><li>بيتحسب من جدول المقاسات العادي بتاعك</li><li>بيختار المقاس في صفحة المنتج بدوسة</li></ul>
+        <a class="more" href="size.html">اعرف أكتر وجرّب ←</a>
         </article>
         <article class="app" data-a="confirm">
           <span class="pr">من <b>320</b> ج.م/شهر</span>
@@ -236,6 +244,7 @@
           <h3>GPA Confirm</h3>
           <p class="q">أوردرات الكاش اللي بترجع بتكلفك شحن رايح جاي. أكّدها على الواتساب قبل ما تشحن.</p>
           <ul><li>رسالة تأكيد من رقم براندك بزرار تأكيد أو إلغاء</li><li>تفكير أوتوماتيك للي مردش</li><li>عرض منتج تاني بخصم بعد التأكيد، يتضاف لنفس الأوردر</li></ul>
+        <a class="more" href="confirm.html">اعرف أكتر وجرّب ←</a>
         </article>
         <article class="app" data-a="loyalty">
           <span class="pr"><b>450</b> ج.م/شهر</span>
@@ -243,6 +252,7 @@
           <h3>GPA Loyalty</h3>
           <p class="q">العميل اللي اشترى مرة، خلّيه يرجع. نادي باسم براندك زي البراندات العالمية.</p>
           <ul><li>نقاط على كل أوردر، ومستويات Silver وGold وBlack</li><li>مكافآت: خصومات، شحن مجاني، هدية عيد الميلاد</li><li>كارت عضوية ومهام تكسب نقاط</li></ul>
+        <a class="more" href="loyalty.html">اعرف أكتر وجرّب ←</a>
         </article>
       </div>
     </div>

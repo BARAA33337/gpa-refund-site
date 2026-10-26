@@ -1,0 +1,407 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GPA Size Demo</title>
+<style>body{margin:0;background:#fff;color:#121212;font-family:"IBM Plex Sans Arabic",Helvetica,Arial,sans-serif}
+.pd{max-width:440px;margin:0 auto;padding:18px 16px 30px}.img{aspect-ratio:1;border-radius:14px;background:linear-gradient(135deg,#e9ecef,#c8cfd6);display:grid;place-items:center;font:700 15px sans-serif;color:#6b7785}
+h1{font-size:20px;margin:16px 0 4px}.pr{font-size:17px;color:#444;margin-bottom:14px;direction:ltr;text-align:right}
+label{font-size:13px;color:#555;display:block;margin-bottom:6px}select{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;font:inherit;margin-bottom:12px;background:#fff}
+.atc{width:100%;padding:14px;border:0;border-radius:10px;background:#121212;color:#fff;font:600 16px inherit;margin-top:8px}</style></head><body><div class="pd">
+<div class="img">صورة المنتج</div><h1>Oversized Hoodie</h1><div class="pr">LE 1,250.00</div>
+<form action="#" onsubmit="return false"><label>المقاس</label><select name="id"><option value=1>S</option><option value=2>M</option><option value=3>L</option><option value=4 disabled>XL (خلصان)</option><option value=5>XXL</option></select>
+
+<style>
+  #gs-x1 { margin: 10px 0; }
+  #gs-x1 .gs-open { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; padding: 4px 0; color: inherit; font: inherit; font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+  #gs-x1 .gs-open svg { width: 18px; height: 18px; }
+  #gs-x1 .gs-mine { font-size: 13px; color: #6f6f6f; margin-inline-start: 8px; text-decoration: none; font-weight: 400; }
+
+  #gs-x1-drawer { --gs-accent: #121212; --gs-ink: #121212; --gs-muted: #6f6f6f; --gs-line: #e4e4e4; --gs-bg: #ffffff; --gs-soft: #f3f3f1; position: fixed; inset: 0; z-index: 2147483000; display: none; font-family: inherit; color: var(--gs-ink); }
+  #gs-x1-drawer * { box-sizing: border-box; }
+  #gs-x1-drawer.on { display: block; }
+  #gs-x1-drawer .gs-scrim { position: absolute; inset: 0; background: rgba(0,0,0,.4); opacity: 0; transition: opacity .3s; }
+  #gs-x1-drawer.open .gs-scrim { opacity: 1; }
+  #gs-x1-drawer .gs-panel { position: absolute; top: 0; bottom: 0; inset-inline-end: 0; width: min(440px, 100vw); background: var(--gs-bg); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .35s cubic-bezier(.2,.8,.2,1); box-shadow: 0 0 60px rgba(0,0,0,.2); }
+  #gs-x1-drawer[dir=rtl] .gs-panel { transform: translateX(-100%); }
+  #gs-x1-drawer.open .gs-panel { transform: none; }
+  @media (prefers-reduced-motion: reduce) { #gs-x1-drawer .gs-panel, #gs-x1-drawer .gs-scrim { transition: none; } }
+  #gs-x1-drawer [hidden] { display: none !important; }
+  #gs-x1-drawer .gs-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px 10px; }
+  #gs-x1-drawer .gs-kicker { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gs-muted); font-weight: 600; }
+  #gs-x1-drawer .gs-x { background: none; border: 0; font-size: 26px; line-height: 1; cursor: pointer; color: var(--gs-ink); padding: 4px 8px; }
+  #gs-x1-drawer .gs-body { flex: 1; overflow-y: auto; padding: 4px 22px 22px; display: grid; align-content: start; gap: 18px; }
+  #gs-x1-drawer .gs-prod { display: flex; gap: 14px; align-items: center; background: var(--gs-soft); padding: 12px; }
+  #gs-x1-drawer .gs-prod img { width: 52px; height: 52px; object-fit: cover; background: #fff; }
+  #gs-x1-drawer .gs-prod b { display: block; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+  #gs-x1-drawer .gs-prod span { font-size: 13px; color: var(--gs-muted); }
+  #gs-x1-drawer .gs-bars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  #gs-x1-drawer .gs-bars i { height: 2px; background: var(--gs-line); transition: background .3s; }
+  #gs-x1-drawer .gs-bars i.on { background: var(--gs-ink); }
+  #gs-x1-drawer .gs-stepno { font-size: 11px; letter-spacing: .14em; color: var(--gs-muted); font-variant-numeric: tabular-nums; direction: ltr; text-align: left; }
+  #gs-x1-drawer[dir=rtl] .gs-stepno { text-align: right; }
+  #gs-x1-drawer[dir=rtl] .gs-body *, #gs-x1-drawer[dir=rtl] .gs-foot button, #gs-x1-drawer[dir=rtl] .gs-kicker { letter-spacing: 0 !important; }
+  #gs-x1-drawer h3 { margin: 0; font-size: 22px; letter-spacing: .02em; text-transform: uppercase; font-weight: 500; line-height: 1.25; color: var(--gs-ink); }
+  #gs-x1-drawer .gs-lead { margin: -8px 0 0; font-size: 13px; color: var(--gs-muted); }
+  #gs-x1-drawer [data-gs-step] { display: grid; gap: 18px; }
+  #gs-x1-drawer .gs-label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--gs-muted); font-weight: 600; }
+  #gs-x1-drawer .gs-seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--gs-line); }
+  #gs-x1-drawer .gs-seg button { background: none; border: 0; padding: 11px 6px; font: inherit; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; color: var(--gs-ink); }
+  #gs-x1-drawer .gs-seg button[aria-pressed=true] { background: var(--gs-ink); color: #fff; }
+  #gs-x1-drawer .gs-meas { display: grid; grid-template-columns: 70px 1fr; gap: 14px 16px; align-items: center; }
+  #gs-x1-drawer .gs-fig { grid-row: span 2; display: grid; place-items: end center; height: 100%; padding-bottom: 8px; }
+  #gs-x1-drawer .gs-fig svg { width: 46px; height: auto; transition: transform .25s; transform-origin: bottom center; color: var(--gs-ink); }
+  #gs-x1-drawer .gs-dial { display: grid; gap: 4px; }
+  #gs-x1-drawer .gs-dial-h { display: flex; justify-content: space-between; align-items: center; }
+  #gs-x1-drawer .gs-units { display: flex; gap: 10px; font-size: 11px; letter-spacing: .1em; }
+  #gs-x1-drawer .gs-units button { background: none; border: 0; padding: 0 0 2px; font: inherit; color: var(--gs-muted); cursor: pointer; border-bottom: 1px solid transparent; }
+  #gs-x1-drawer .gs-units button[aria-pressed=true] { color: var(--gs-ink); border-color: var(--gs-ink); }
+  #gs-x1-drawer .gs-num { font-size: 34px; font-weight: 400; font-variant-numeric: tabular-nums; direction: ltr; text-align: start; line-height: 1.2; }
+  #gs-x1-drawer[dir=rtl] .gs-num { text-align: end; }
+  #gs-x1-drawer .gs-num small { font-size: 13px; color: var(--gs-muted); margin-left: 4px; }
+  #gs-x1-drawer .gs-ctl { display: grid; grid-template-columns: 28px 1fr 28px; gap: 10px; align-items: center; direction: ltr; }
+  #gs-x1-drawer .gs-ctl button { width: 28px; height: 28px; border: 0; background: none; font-size: 20px; cursor: pointer; color: var(--gs-ink); padding: 0; }
+  #gs-x1-drawer input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 20px; margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; cursor: pointer; }
+  #gs-x1-drawer input[type=range]::-webkit-slider-runnable-track { height: 2px; background: var(--gs-line); border: 0; border-radius: 0; }
+  #gs-x1-drawer input[type=range]::-moz-range-track { height: 2px; background: var(--gs-line); border: 0; }
+  #gs-x1-drawer input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -7px; border-radius: 50%; background: var(--gs-ink); border: 0; box-shadow: none; }
+  #gs-x1-drawer input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--gs-ink); border: 0; }
+  #gs-x1-drawer .gs-live { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gs-line); padding-top: 14px; }
+  #gs-x1-drawer .gs-live small { display: block; color: var(--gs-muted); font-size: 12px; margin-top: 2px; }
+  #gs-x1-drawer .gs-live b { font-size: 30px; font-weight: 400; }
+  #gs-x1-drawer .gs-priv { font-size: 12px; color: var(--gs-muted); display: flex; gap: 6px; align-items: center; }
+  #gs-x1-drawer .gs-opts { display: grid; gap: 6px; }
+  #gs-x1-drawer .gs-opt { display: grid; grid-template-columns: 54px 1fr 14px; gap: 14px; align-items: center; padding: 14px 12px; border: 0; background: none; text-align: start; font: inherit; color: var(--gs-ink); cursor: pointer; }
+  #gs-x1-drawer .gs-opt[aria-pressed=true] { background: var(--gs-soft); }
+  #gs-x1-drawer .gs-opt svg { width: 34px; height: 34px; justify-self: center; }
+  #gs-x1-drawer .gs-opt b { display: block; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+  #gs-x1-drawer .gs-opt small { color: var(--gs-muted); font-size: 12px; }
+  #gs-x1-drawer .gs-opt i { width: 7px; height: 7px; border-radius: 50%; background: transparent; }
+  #gs-x1-drawer .gs-opt[aria-pressed=true] i { background: var(--gs-ink); }
+  #gs-x1-drawer .gs-pair { display: grid; gap: 8px; }
+  #gs-x1-drawer .gs-ring { width: 150px; height: 150px; margin: 0 auto; position: relative; display: grid; place-items: center; color: var(--gs-ink); }
+  #gs-x1-drawer .gs-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+  #gs-x1-drawer .gs-ring svg .arc { transition: stroke-dasharray .6s ease; }
+  #gs-x1-drawer .gs-ring b { font-size: 50px; font-weight: 400; }
+  #gs-x1-drawer .gs-center { text-align: center; display: grid; gap: 4px; }
+  #gs-x1-drawer .gs-match { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+  #gs-x1-drawer .gs-scale { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; text-align: center; }
+  #gs-x1-drawer .gs-scale button { background: none; border: 0; padding: 24px 0 8px; font: inherit; font-size: 13px; color: var(--gs-muted); cursor: pointer; position: relative; border-bottom: 1px solid var(--gs-line); }
+  #gs-x1-drawer .gs-scale button.cur { color: var(--gs-ink); font-weight: 700; border-bottom: 2px solid var(--gs-ink); }
+  #gs-x1-drawer .gs-scale button.you::before { content: attr(data-you); position: absolute; top: 0; left: 0; right: 0; font-size: 10px; letter-spacing: .14em; color: var(--gs-muted); text-transform: uppercase; font-weight: 400; }
+  #gs-x1-drawer .gs-scale button.you::after { content: ""; position: absolute; top: 14px; left: 50%; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--gs-ink); }
+  #gs-x1-drawer .gs-hint { font-size: 12px; color: var(--gs-muted); text-align: center; margin: -10px 0 0; }
+  #gs-x1-drawer .gs-areas { display: grid; gap: 14px; }
+  #gs-x1-drawer .gs-arow, #gs-x1-drawer .gs-ahead { display: grid; grid-template-columns: 64px 1fr 60px; gap: 10px; align-items: center; }
+  #gs-x1-drawer .gs-arow { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  #gs-x1-drawer .gs-arow .t { position: relative; height: 14px; }
+  #gs-x1-drawer .gs-arow .t::before { content: ""; position: absolute; top: 6px; left: 0; right: 0; height: 1px; background: var(--gs-line); }
+  #gs-x1-drawer .gs-arow .t::after { content: ""; position: absolute; top: 2px; left: 50%; width: 1px; height: 9px; background: var(--gs-line); }
+  #gs-x1-drawer .gs-arow .t i { position: absolute; top: 2px; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: var(--gs-ink); transition: left .35s; z-index: 1; }
+  #gs-x1-drawer .gs-arow .v { text-align: end; text-transform: none; letter-spacing: 0; font-size: 12px; }
+  #gs-x1-drawer .gs-ahead { font-size: 10px; letter-spacing: .14em; color: var(--gs-muted); text-transform: uppercase; }
+  #gs-x1-drawer .gs-ahead > span:nth-child(2) { display: flex; justify-content: space-between; direction: ltr; }
+  #gs-x1-drawer .gs-ahead em { font-style: normal; }
+  #gs-x1-drawer .gs-note { background: var(--gs-soft); padding: 14px; font-size: 14px; line-height: 1.6; }
+  #gs-x1-drawer .gs-note small { display: block; font-size: 10px; letter-spacing: .16em; color: var(--gs-muted); text-transform: uppercase; margin-bottom: 4px; }
+  #gs-x1-drawer .gs-warn { color: #a33d00; font-size: 13px; margin: 0; }
+  #gs-x1-drawer .gs-fine { font-size: 11px; color: var(--gs-muted); margin: 0; }
+  #gs-x1-drawer .gs-foot { display: flex; gap: 8px; padding: 12px 22px calc(16px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--gs-line); }
+  #gs-x1-drawer .gs-foot button { border: 1px solid var(--gs-ink); background: var(--gs-bg); color: var(--gs-ink); padding: 15px; font: inherit; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; }
+  #gs-x1-drawer .gs-foot [data-back] { width: 52px; flex: none; }
+  #gs-x1-drawer .gs-foot .main { flex: 1; background: var(--gs-accent); border-color: var(--gs-accent); color: #fff; }
+  #gs-x1-drawer .gs-vt { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--gs-line); }
+  #gs-x1-drawer .gs-vt button { background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 4px; font: inherit; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gs-muted); cursor: pointer; }
+  #gs-x1-drawer .gs-vt button[aria-pressed=true] { color: var(--gs-ink); border-bottom-color: var(--gs-ink); font-weight: 600; }
+  #gs-x1-drawer .gs-tw { overflow-x: auto; }
+  #gs-x1-drawer .gs-tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; }
+  #gs-x1-drawer .gs-tbl th { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--gs-muted); font-weight: 600; text-align: center; padding: 8px 6px; border-bottom: 1px solid var(--gs-ink); }
+  #gs-x1-drawer .gs-tbl td { text-align: center; padding: 12px 6px; border-bottom: 1px solid var(--gs-line); direction: ltr; }
+  #gs-x1-drawer .gs-tbl tbody tr { cursor: pointer; }
+  #gs-x1-drawer .gs-tbl tbody tr:hover { background: var(--gs-soft); }
+  #gs-x1-drawer .gs-tbl tbody tr.on, #gs-x1-drawer .gs-tbl tbody tr.on:hover { background: var(--gs-ink); color: #fff; }
+  #gs-x1-drawer .gs-tbl td em { display: block; font-style: normal; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+  #gs-x1-drawer .gs-tbl tr.you td:first-child b { border-bottom: 2px solid currentColor; }
+  #gs-x1-drawer .gs-gm { border: 1px solid var(--gs-line); padding: 12px 14px; display: grid; gap: 8px; }
+  #gs-x1-drawer .gs-gm small { font-size: 10px; letter-spacing: .16em; color: var(--gs-muted); text-transform: uppercase; }
+  #gs-x1-drawer .gs-gm div { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+  #gs-x1-drawer .gs-gm span { display: grid; }
+  #gs-x1-drawer .gs-gm em { font-style: normal; font-size: 12px; color: var(--gs-muted); }
+  #gs-x1-drawer .gs-gm b { font-size: 18px; font-weight: 500; }
+  #gs-x1-drawer .gs-link { background: none; border: 0; padding: 0; font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; color: var(--gs-ink); cursor: pointer; justify-self: start; }
+  #gs-x1-drawer :focus-visible { outline: 2px solid var(--gs-accent); outline-offset: 2px; }
+</style>
+
+<div id="gs-x1" class="gpa-size" dir="rtl">
+  <button type="button" class="gs-open" data-gs-open>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l4-4 14 14-4 4z"/><path d="M8 6l2 2M11 9l1 1M14 12l2 2"/></svg>
+    <span>اعرف مقاسك</span>
+    <span class="gs-mine" data-gs-mine hidden></span>
+  </button>
+
+  <script type="application/json" data-gs-config>
+    {
+      "lang": "ar",
+      "male": "",
+      "female": "",
+      "fitAdjust": true,
+      "garment": "M | 67 | 51\nL | 71 | 52\nXL | 74 | 55\nXXL | 76 | 58",
+      "cols": "",
+      "mode": "quiz",
+      "garmentFit": "regular",
+      "title": "Oversized Hoodie",
+      "price": "LE 1,250.00",
+      "image": "",
+      "optionIndex": 0,
+      "variants": [{"id": 1, "options": ["S"], "available": true}, {"id": 2, "options": ["M"], "available": true}, {"id": 3, "options": ["L"], "available": true}, {"id": 4, "options": ["XL"], "available": false}, {"id": 5, "options": ["XXL"], "available": true}]
+    }
+  </script>
+  <script>
+  (function () {
+    var host = document.getElementById("gs-x1"); if (!host || host.__gs) return; host.__gs = 1;
+    var cfg = JSON.parse(host.querySelector('[data-gs-config]').textContent);
+    var EN = cfg.lang === 'en', ID = "gs-x1";
+    var T = EN ? {
+      kicker: 'Find your perfect size', s1: "Let's find your fit", s1l: 'Two measurements are all it takes. Drag to adjust.', sizing: 'Sizing', female: 'Female', male: 'Male', height: 'Height', weight: 'Weight', live: 'Live estimate', liveS: 'Refined in the next steps', priv: 'Saved privately on this device, so every piece shows your size.',
+      s2: 'Your body shape', s2l: 'This helps us place chest and waist correctly.', chest: 'Chest', waist: 'Waist', c1: 'Slimmer', c2: 'Average', c3: 'Broader', w1: 'Flatter', w2: 'Average', w3: 'Rounder',
+      s3: 'How do you like it to fit?', s3l: 'We size around the way you wear it.', f1: 'Slim', f1s: 'Close to the body. Sharp and tailored.', f2: 'Regular', f2s: 'The silhouette the designer intended.', f3: 'Relaxed', f3s: 'Room to move and layer underneath.',
+      next: 'Next', find: 'Find my size →', select: 'Select size', redo: 'Start over', best: 'Best match', fitm: '% fit match', conf: 'A confident match for your measurements.', ok: 'A good match. Check the fit notes below.', you: 'You', tap: 'Tap a size to see how it would fit.', snug: 'Snug', ideal: 'Ideal', roomy: 'Roomy', length: 'Length', note: 'Fit note', fine: 'This is a general recommendation. Fit can vary by style and personal preference.', soldout: 'This size is currently sold out.', out: "Your measurements are outside this product's size chart. Contact us and we'll help you choose.", picked: 'Selected ✓', mine: 'Your size: ', noOpt: 'Select this size from the options on the page.',
+      vq: 'Find my size', vc: 'Size chart', chartT: 'Size chart', chartL: 'Garment measurements. Tap a size to select it.', sizeH: 'Size', piece: 'This piece', fullChart: 'See full size chart', close: 'Close', yourS: 'Your size',
+      nIdeal: 'Against your measurements this piece fits true to size.', nSnug: 'This size will feel close on the {a}. Size up if you prefer more room.', nRoomy: 'This size gives extra room on the {a}. Size down for a closer fit.'
+    } : {
+      kicker: 'اعرف مقاسك المظبوط', s1: 'يلا نعرف مقاسك', s1l: 'قياسين بس. حرّك علشان تظبط.', sizing: 'المقاسات', female: 'حريمي', male: 'رجالي', height: 'الطول', weight: 'الوزن', live: 'تقدير مبدئي', liveS: 'هيتظبط في الخطوات الجاية', priv: 'بيتحفظ على جهازك بس، علشان كل منتج يوريك مقاسك.',
+      s2: 'شكل جسمك', s2l: 'ده بيساعدنا نظبط الصدر والوسط.', chest: 'الصدر', waist: 'الوسط', c1: 'رفيع', c2: 'عادي', c3: 'عريض', w1: 'مسطّح', w2: 'عادي', w3: 'مدوّر',
+      s3: 'بتحب اللبس عليك يبقى إزاي؟', s3l: 'بنختار المقاس على حسب ما بتحب تلبس.', f1: 'ضيق', f1s: 'لازق على الجسم وشكله شيك.', f2: 'مظبوط', f2s: 'زي ما المصمم عامله بالظبط.', f3: 'واسع', f3s: 'مريح وتقدر تلبس تحته.',
+      next: 'التالي', find: 'اعرف مقاسي ←', select: 'اختار المقاس', redo: 'من الأول', best: 'أنسب مقاس', fitm: '% تطابق', conf: 'مقاس مناسب جدًا لقياساتك.', ok: 'مقاس مناسب. بص على ملاحظة المقاس تحت.', you: 'إنت', tap: 'دوس على أي مقاس تشوفه هيبقى عليك إزاي.', snug: 'ضيق', ideal: 'مظبوط', roomy: 'واسع', length: 'الطول', note: 'ملاحظة', fine: 'ده ترشيح عام، والمقاس ممكن يختلف حسب الموديل وذوقك.', soldout: 'المقاس ده خلصان حاليًا.', out: 'قياساتك برّه جدول مقاسات المنتج ده. كلّمنا ونساعدك تختار.', picked: 'اتختار ✓', mine: 'مقاسك: ', noOpt: 'اختار المقاس ده من الاختيارات في الصفحة.',
+      vq: 'اعرف مقاسك', vc: 'جدول المقاسات', chartT: 'جدول المقاسات', chartL: 'مقاسات القطعة نفسها. دوس على مقاس علشان تختاره.', sizeH: 'المقاس', piece: 'مقاسات القطعة', fullChart: 'شوف جدول المقاسات كله', close: 'إغلاق', yourS: 'مقاسك',
+      nIdeal: 'على قياساتك القطعة دي هتيجي مظبوطة على مقاسك.', nSnug: 'المقاس ده هيبقى ضيق شوية عند {a}. لو بتحب الواسع خد المقاس الأكبر.', nRoomy: 'المقاس ده فيه وسع زيادة عند {a}. لو بتحب المظبوط خد المقاس الأصغر.'
+    };
+    function parse(txt) {
+      return String(txt || '').split(/\n/).map(function (l) {
+        var p = l.split('|').map(function (x) { return x.trim(); }); if (p.length < 3 || !p[0]) return null;
+        var h = p[1].match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)/), w = p[2].match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)/);
+        return h && w ? { size: p[0], hmin: +h[1], hmax: +h[2], wmin: +w[1], wmax: +w[2] } : null;
+      }).filter(Boolean);
+    }
+    var charts = { m: parse(cfg.male), f: parse(cfg.female) };
+    var G = String(cfg.garment || '').split(/\n/).map(function (l) { var p = l.split('|').map(function (x) { return x.trim(); }); return p.length > 1 && p[0] ? { size: p[0], vals: p.slice(1) } : null; }).filter(Boolean);
+    var COLS = String(cfg.cols || (EN ? 'Length | Width' : 'الطول | العرض')).split('|').map(function (x) { return x.trim(); }).filter(Boolean);
+    var hasQ = charts.m.length > 0, MODE = cfg.mode || 'both';
+    if (!hasQ && !G.length) { host.hidden = true; return; }
+    var GQ = false, GFIT = { slim: -4, regular: 0, oversized: 12 }[cfg.garmentFit] || 0;
+    if (!hasQ) {
+      var gr = G.map(function (g) { return { size: g.size, len: parseFloat(g.vals[0]) || 0, wid: parseFloat(g.vals[1]) || 0 }; }).filter(function (r) { return r.wid > 0; });
+      if (gr.length) { GQ = true; charts.m = gr; charts.f = gr; } else MODE = 'chart';
+    } else if (!G.length) MODE = 'quiz';
+    if (!G.length) MODE = 'quiz';
+    var hasF = charts.f.length > 0;
+
+    var S = { g: 'm', h: 175, w: 72, hu: 'cm', wu: 'kg', chest: 0, waist: 0, fit: 0, step: 1, view: 0, rec: null, gu: 'cm', pick: null };
+    var saved = false;
+    try { var sv = JSON.parse(localStorage.getItem('gpa-size') || 'null'); if (sv) { saved = true; ['g', 'h', 'w', 'hu', 'wu', 'chest', 'waist', 'fit'].forEach(function (k) { if (sv[k] != null) S[k] = sv[k]; }); } } catch (e) {}
+    if (!hasF) S.g = 'm';
+    function save() { saved = true; try { localStorage.setItem('gpa-size', JSON.stringify({ g: S.g, h: S.h, w: S.w, hu: S.hu, wu: S.wu, chest: S.chest, waist: S.waist, fit: S.fit })); } catch (e) {} }
+    function rows() { return S.g === 'f' && hasF ? charts.f : charts.m; }
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+    function dist(v, a, b) { return v < a ? a - v : v > b ? v - b : 0; }
+
+    // garment-based: estimated body chest vs garment chest (2 x flat width)
+    function bodyChest() { var c = S.g === 'f' ? 28 + 0.6 * S.w + 0.14 * S.h : 30 + 0.55 * S.w + 0.16 * S.h; return c + S.chest * 4 + S.waist * 2; }
+    function gTarget() { return 10 + GFIT + S.fit * 5; }
+    function gEase(r) { return 2 * r.wid - bodyChest(); }
+    function gScore(r) { var e = gEase(r), t = gTarget(); return Math.abs(e - t) / 4 + (e < 2 ? (2 - e) / 1.5 : 0) + (r.len ? Math.abs(r.len - 0.4 * S.h) / 10 : 0); }
+    function compute() {
+      if (GQ) {
+        var RG = rows(), bi = 0; RG.forEach(function (r, i) { if (gScore(r) < gScore(RG[bi])) bi = i; });
+        var e = gEase(RG[bi]); return { idx: bi, base: bi, out: e < -6 || e > gTarget() + 26 };
+      }
+      var R = rows(), we = S.w + S.chest * 3 + S.waist * 3;
+      var sc = R.map(function (r, i) { return { i: i, s: dist(we, r.wmin, r.wmax) / 4 + dist(S.h, r.hmin, r.hmax) / 6, m: Math.abs(we - (r.wmin + r.wmax) / 2) / 4 + Math.abs(S.h - (r.hmin + r.hmax) / 2) / 6 }; });
+      var best = sc.slice().sort(function (a, b) { return (a.s - b.s) || (a.m - b.m); })[0], idx = best.i;
+      if (cfg.fitAdjust && S.fit) idx = clamp(idx + S.fit, 0, R.length - 1);
+      return { idx: idx, base: best.i, out: best.s > 2.5 };
+    }
+    // x: 0 = snug, 0.5 = ideal, 1 = roomy
+    function areas(i) {
+      var r = rows()[i];
+      if (GQ) { var t = gTarget(), ce = gEase(r), we2 = 2 * r.wid - (bodyChest() + S.waist * 4) ; return [{ k: T.chest, x: clamp(0.5 + (ce - t) / 24, 0.04, 0.96) }, { k: T.waist, x: clamp(0.5 + (we2 - t) / 24, 0.04, 0.96) }, { k: T.length, x: r.len ? clamp(0.5 + (r.len - 0.4 * S.h) / 16, 0.04, 0.96) : 0.5 }]; }
+      function pos(v, a, b) { var t = (v - a) / Math.max(1, b - a); return clamp(0.5 - (t - 0.5) * 0.75, 0.04, 0.96); }
+      var wc = S.w + S.chest * 4, ww = S.w + S.waist * 5;
+      return [{ k: T.chest, x: pos(wc, r.wmin, r.wmax) }, { k: T.waist, x: pos(ww, r.wmin, r.wmax) }, { k: T.length, x: pos(S.h, r.hmin, r.hmax) }];
+    }
+    function label(x) { return x < 0.33 ? T.snug : x > 0.67 ? T.roomy : T.ideal; }
+    function matchPct(i) {
+      var a = areas(i), d = a.reduce(function (s, z) { return s + Math.abs(z.x - 0.5); }, 0), r = rows()[i];
+      if (GQ) return Math.round(clamp(98 - d * 30, 48, 98));
+      var o = dist(S.w + S.chest * 3 + S.waist * 3, r.wmin, r.wmax) / 4 + dist(S.h, r.hmin, r.hmax) / 6;
+      return Math.round(clamp(98 - d * 22 - o * 14, 48, 98));
+    }
+
+    var old = document.getElementById(ID + '-drawer'); if (old) old.parentNode.removeChild(old);
+    var root = document.createElement('div'); root.id = ID + '-drawer'; root.setAttribute('dir', EN ? 'ltr' : 'rtl'); root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', 'true'); root.setAttribute('aria-label', T.kicker);
+    var figSvg = '<svg viewBox="0 0 40 110" aria-hidden="true"><circle cx="20" cy="9" r="7" fill="currentColor"/><path d="M8 22h24l-3 40h-4l-2 46h-6l-2-46h-4z" fill="currentColor"/></svg>';
+    function shirt(w) { return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M' + (14 - w) + ' 6l-' + (8 + w) + ' 6 4 7 4-2v19h' + (12 + 2 * w) + 'V17l4 2 4-7-' + (8 + w) + '-6c-1 3-4 5-6 5s-5-2-6-5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>'; }
+    root.innerHTML =
+      '<div class="gs-scrim" data-close></div><div class="gs-panel">' +
+      '<div class="gs-top"><span class="gs-kicker">' + T.kicker + '</span><button type="button" class="gs-x" data-close aria-label="close">×</button></div>' +
+      '<div class="gs-body">' +
+        '<div class="gs-prod">' + (cfg.image ? '<img src="' + cfg.image + '" alt="">' : '') + '<div><b></b><span></span></div></div>' +
+        (MODE === 'both' ? '<div class="gs-vt"><button type="button" data-vt="q">' + T.vq + '</button><button type="button" data-vt="c">' + T.vc + '</button></div>' : '') +
+        '<div class="gs-bars"><i></i><i></i><i></i></div>' +
+        '<div data-gs-step="1"><div class="gs-stepno">01 / 03</div><h3>' + T.s1 + '</h3><p class="gs-lead">' + T.s1l + '</p>' +
+          (hasF ? '<div class="gs-label">' + T.sizing + '</div><div class="gs-seg"><button type="button" data-g="f">' + T.female + '</button><button type="button" data-g="m">' + T.male + '</button></div>' : '') +
+          '<div class="gs-meas"><div class="gs-fig" data-fig>' + figSvg + '</div>' +
+            '<div class="gs-dial"><div class="gs-dial-h"><span class="gs-label">' + T.height + '</span><span class="gs-units"><button type="button" data-hu="cm">CM</button><button type="button" data-hu="in">FT/IN</button></span></div><div class="gs-num" data-hv></div><div class="gs-ctl"><button type="button" data-d="h-" aria-label="-">−</button><input type="range" min="140" max="210" step="1" data-hr aria-label="' + T.height + '"><button type="button" data-d="h+" aria-label="+">+</button></div></div>' +
+            '<div class="gs-dial"><div class="gs-dial-h"><span class="gs-label">' + T.weight + '</span><span class="gs-units"><button type="button" data-wu="kg">KG</button><button type="button" data-wu="lb">LBS</button></span></div><div class="gs-num" data-wv></div><div class="gs-ctl"><button type="button" data-d="w-" aria-label="-">−</button><input type="range" min="40" max="150" step="1" data-wr aria-label="' + T.weight + '"><button type="button" data-d="w+" aria-label="+">+</button></div></div>' +
+          '</div>' +
+          '<div class="gs-live"><div><span class="gs-label">' + T.live + '</span><small>' + T.liveS + '</small></div><b data-live></b></div>' +
+          '<div class="gs-priv"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>' + T.priv + '</div>' +
+        '</div>' +
+        '<div data-gs-step="2" hidden><div class="gs-stepno">02 / 03</div><h3>' + T.s2 + '</h3><p class="gs-lead">' + T.s2l + '</p>' +
+          '<div class="gs-pair"><div class="gs-label">' + T.chest + '</div><div class="gs-seg" data-k="chest"><button type="button" data-v="-1">' + T.c1 + '</button><button type="button" data-v="0">' + T.c2 + '</button><button type="button" data-v="1">' + T.c3 + '</button></div></div>' +
+          '<div class="gs-pair"><div class="gs-label">' + T.waist + '</div><div class="gs-seg" data-k="waist"><button type="button" data-v="-1">' + T.w1 + '</button><button type="button" data-v="0">' + T.w2 + '</button><button type="button" data-v="1">' + T.w3 + '</button></div></div>' +
+        '</div>' +
+        '<div data-gs-step="3" hidden><div class="gs-stepno">03 / 03</div><h3>' + T.s3 + '</h3><p class="gs-lead">' + T.s3l + '</p><div class="gs-opts">' +
+          '<button type="button" class="gs-opt" data-fit="-1">' + shirt(-2) + '<span><b>' + T.f1 + '</b><small>' + T.f1s + '</small></span><i></i></button>' +
+          '<button type="button" class="gs-opt" data-fit="0">' + shirt(0) + '<span><b>' + T.f2 + '</b><small>' + T.f2s + '</small></span><i></i></button>' +
+          '<button type="button" class="gs-opt" data-fit="1">' + shirt(3) + '<span><b>' + T.f3 + '</b><small>' + T.f3s + '</small></span><i></i></button>' +
+        '</div></div>' +
+        '<div data-gs-step="4" hidden data-res></div>' +
+        '<div data-gs-step="5" hidden data-chart></div>' +
+      '</div>' +
+      '<div class="gs-foot"><button type="button" data-back aria-label="back">' + (EN ? '←' : '→') + '</button><button type="button" class="main" data-next></button></div>' +
+      '</div>';
+    root.querySelector('.gs-prod b').textContent = cfg.title; root.querySelector('.gs-prod span').textContent = cfg.price;
+    document.body.appendChild(root);
+    function $(s) { return root.querySelector(s); }
+    function $$(s) { return Array.prototype.slice.call(root.querySelectorAll(s)); }
+    var hr = $('[data-hr]'), wr = $('[data-wr]');
+
+    function fmtH() { if (S.hu === 'in') { var t = Math.round(S.h / 2.54), f = Math.floor(t / 12); return f + '′ ' + (t - f * 12) + '″'; } return S.h + '<small>cm</small>'; }
+    function fmtW() { return S.wu === 'lb' ? Math.round(S.w * 2.2046) + '<small>lbs</small>' : S.w + '<small>kg</small>'; }
+    function paint1() {
+      hr.value = S.h; wr.value = S.w;
+      $('[data-hv]').innerHTML = fmtH(); $('[data-wv]').innerHTML = fmtW();
+      $$('[data-hu]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-hu') === S.hu)); });
+      $$('[data-wu]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-wu') === S.wu)); });
+      $$('[data-g]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-g') === S.g)); });
+      var sx = clamp(0.75 + (S.w / Math.pow(S.h / 100, 2) - 18) / 30, 0.75, 1.5), sy = clamp(S.h / 175, 0.8, 1.15);
+      $('[data-fig] svg').style.transform = 'scale(' + sx.toFixed(2) + ',' + sy.toFixed(2) + ')';
+      var c = compute(); $('[data-live]').textContent = c.out ? '—' : rows()[c.base].size;
+    }
+    function paintSeg() {
+      $$('[data-k]').forEach(function (g) { var k = g.getAttribute('data-k'); Array.prototype.forEach.call(g.children, function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-v') === S[k])); }); });
+      $$('[data-fit]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-fit') === S.fit)); });
+    }
+    function variantFor(size) {
+      if (cfg.optionIndex < 0) return null;
+      var cands = cfg.variants.filter(function (v) { return String(v.options[cfg.optionIndex]).trim().toLowerCase() === size.toLowerCase(); });
+      var f = document.querySelector('form[action*="/cart/add"]'), idIn = f && f.querySelector('[name="id"]');
+      var cur = idIn && cfg.variants.filter(function (x) { return String(x.id) === String(idIn.value); })[0];
+      var exact = cur && cands.filter(function (v) { return v.options.every(function (o, i) { return i === cfg.optionIndex || o === cur.options[i]; }); })[0];
+      return exact || cands.filter(function (v) { return v.available; })[0] || cands[0] || null;
+    }
+    function gFor(size) { var l = String(size).toLowerCase(); return G.filter(function (g) { return g.size.toLowerCase() === l; })[0]; }
+    function gVal(v) { var n = parseFloat(v); if (isNaN(n)) return v || '—'; return S.gu === 'in' ? (Math.round(n / 2.54 * 10) / 10) : n; }
+    function paintChart() {
+      var box = $('[data-chart]'), you = saved && (hasQ || GQ) ? (function () { var c = compute(); return c.out ? null : rows()[c.idx].size.toLowerCase(); })() : null;
+      box.innerHTML = '<div class="gs-dial-h"><h3>' + T.chartT + '</h3><span class="gs-units"><button type="button" data-gu="cm">CM</button><button type="button" data-gu="in">IN</button></span></div><p class="gs-lead">' + T.chartL + '</p>' +
+        '<div class="gs-tw"><table class="gs-tbl"><thead><tr><th>' + T.sizeH + '</th>' + COLS.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        G.map(function (g) { var l = g.size.toLowerCase(); return '<tr data-pick="' + g.size.replace(/"/g, '') + '" class="' + (S.pick && S.pick.toLowerCase() === l ? 'on ' : '') + (you === l ? 'you' : '') + '"><td><b></b>' + (you === l ? '<em>' + T.yourS + '</em>' : '') + '</td>' + COLS.map(function (c, i) { return '<td>' + gVal(g.vals[i]) + '</td>'; }).join('') + '</tr>'; }).join('') +
+        '</tbody></table></div><p class="gs-fine">' + (S.gu === 'in' ? 'inches' : 'cm') + '</p>';
+      Array.prototype.forEach.call(box.querySelectorAll('tbody tr'), function (tr, i) { tr.querySelector('b').textContent = G[i].size; });
+      $$('[data-gu]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-gu') === S.gu)); });
+    }
+    function paintRes() {
+      var R = rows(), rec = S.rec, i = S.view, box = $('[data-res]');
+      if (rec.out) { box.innerHTML = '<p class="gs-warn"></p>'; box.firstChild.textContent = T.out; return; }
+      var pct = matchPct(i), a = areas(i), C = 2 * Math.PI * 70;
+      box.innerHTML = '<div class="gs-center"><span class="gs-label">' + T.best + '</span></div>' +
+        '<div class="gs-ring"><svg viewBox="0 0 150 150" aria-hidden="true"><circle cx="75" cy="75" r="70" fill="none" stroke="#e4e4e4" stroke-width="2"/><circle class="arc" cx="75" cy="75" r="70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="' + (C * pct / 100).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg><b></b></div>' +
+        '<div class="gs-center"><span class="gs-match" dir="ltr">' + pct + T.fitm + '</span><span class="gs-lead" style="margin:0">' + (pct >= 85 ? T.conf : T.ok) + '</span></div>' +
+        '<div class="gs-scale">' + R.map(function (r, k) { return '<button type="button" data-view="' + k + '" data-you="' + T.you + '" class="' + (k === rec.idx ? 'you ' : '') + (k === i ? 'cur' : '') + '"></button>'; }).join('') + '</div>' +
+        '<p class="gs-hint">' + T.tap + '</p>' +
+        '<div class="gs-areas"><div class="gs-ahead"><span></span><span><em>' + (EN ? T.snug : T.roomy) + '</em><em>' + T.ideal + '</em><em>' + (EN ? T.roomy : T.snug) + '</em></span><span></span></div>' +
+        a.map(function (z) { var left = EN ? z.x : 1 - z.x; return '<div class="gs-arow"><span>' + z.k + '</span><span class="t"><i style="left:' + (left * 100).toFixed(1) + '%"></i></span><span class="v">' + label(z.x) + '</span></div>'; }).join('') + '</div>' +
+        (gFor(R[i].size) ? '<div class="gs-gm"><small>' + T.piece + ' · ' + R[i].size.replace(/</g, '') + '</small><div>' + COLS.map(function (c, k) { return '<span><em>' + c + '</em><b dir="ltr">' + gVal(gFor(R[i].size).vals[k]) + ' ' + (S.gu === 'in' ? 'in' : 'cm') + '</b></span>'; }).join('') + '</div>' + (MODE === 'both' ? '<button type="button" class="gs-link" data-vt="c">' + T.fullChart + '</button>' : '') + '</div>' : '') +
+        '<div class="gs-note"><small>' + T.note + '</small><span data-note></span></div>' +
+        '<p class="gs-warn" data-sold hidden>' + T.soldout + '</p>' +
+        '<p class="gs-fine">' + T.fine + '</p>';
+      box.querySelector('.gs-ring b').textContent = R[i].size;
+      Array.prototype.forEach.call(box.querySelectorAll('[data-view]'), function (b) { b.textContent = R[+b.getAttribute('data-view')].size; });
+      var sn = a.filter(function (z) { return z.x < 0.33; }), rm = a.filter(function (z) { return z.x > 0.67; });
+      function names(l) { return l.map(function (z) { return z.k; }).join(EN ? ' & ' : ' و'); }
+      box.querySelector('[data-note]').textContent = sn.length ? T.nSnug.replace('{a}', names(sn)) : rm.length ? T.nRoomy.replace('{a}', names(rm)) : T.nIdeal;
+      var v = variantFor(R[i].size); box.querySelector('[data-sold]').hidden = !(v && !v.available);
+    }
+    function nextLabel() { var n = S.step; if (n === 5) return S.pick ? T.select + ' ' + S.pick : (MODE === 'chart' ? T.close : T.vq + (EN ? ' →' : ' ←')); return n < 3 ? T.next : n === 3 ? T.find : (S.rec && !S.rec.out ? T.select + ' ' + rows()[S.view].size : T.redo); }
+    function go(n) {
+      S.step = n;
+      $$('[data-gs-step]').forEach(function (s) { s.hidden = +s.getAttribute('data-gs-step') !== n; });
+      $$('.gs-bars i').forEach(function (b, k) { b.className = k < Math.min(n, 3) ? 'on' : ''; });
+      $('.gs-bars').hidden = n >= 4;
+      $('[data-back]').hidden = n === 1 || n === 5;
+      $$('[data-vt]').forEach(function (b) { if (b.closest('.gs-vt')) b.setAttribute('aria-pressed', String((b.getAttribute('data-vt') === 'c') === (n === 5))); });
+      if (n === 5) paintChart();
+      if (n === 1) paint1();
+      if (n === 2 || n === 3) paintSeg();
+      if (n === 4) { S.rec = compute(); S.view = S.rec.idx; save(); paintRes(); showMine(); }
+      $('[data-next]').textContent = nextLabel();
+      $('.gs-body').scrollTop = 0;
+    }
+    function selectSize(size) {
+      var f = document.querySelector('form[action*="/cart/add"]'), done = false, lc = size.toLowerCase();
+      var radios = Array.prototype.slice.call(document.querySelectorAll('input[type=radio]')).filter(function (i) { return !root.contains(i) && String(i.value).trim().toLowerCase() === lc; });
+      if (radios[0]) { radios[0].click(); radios[0].checked = true; radios[0].dispatchEvent(new Event('change', { bubbles: true })); done = true; }
+      if (!done) Array.prototype.slice.call(document.querySelectorAll('select')).some(function (s) {
+        var o = Array.prototype.slice.call(s.options).filter(function (op) { return String(op.value).trim().toLowerCase() === lc || String(op.text).trim().toLowerCase() === lc; })[0];
+        if (o) { s.value = o.value; s.dispatchEvent(new Event('change', { bubbles: true })); done = true; return true; }
+      });
+      var v = variantFor(size);
+      if (!done && v && f) { var idIn = f.querySelector('[name="id"]'); if (idIn) { if (idIn.tagName === 'SELECT' || idIn.type !== 'hidden' || true) idIn.value = v.id; idIn.dispatchEvent(new Event('change', { bubbles: true })); done = true; } }
+      return done;
+    }
+    function showMine() { if (!saved || !(hasQ || GQ)) return; var c = compute(), m = host.querySelector('[data-gs-mine]'); if (c.out) { m.hidden = true; return; } m.textContent = T.mine + rows()[c.idx].size; m.hidden = false; }
+    var lastFocus = null;
+    function open() { lastFocus = document.activeElement; root.classList.add('on'); requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.add('open'); }); }); document.documentElement.style.overflow = 'hidden'; go(MODE === 'chart' ? 5 : saved ? 4 : 1); setTimeout(function () { var x = $('.gs-x'); if (x) x.focus(); }, 60); }
+    function close() { root.classList.remove('open'); document.documentElement.style.overflow = ''; setTimeout(function () { root.classList.remove('on'); }, 330); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+
+    if (false) {
+      var pf = document.querySelector('form[action*="/cart/add"]:not([id*="installment"])'), btn = pf && pf.querySelector('[type="submit"], [name="add"]');
+      if (btn) { var anchor = btn; while (anchor.parentNode && anchor.parentNode !== pf) anchor = anchor.parentNode; if (anchor.parentNode === pf) pf.insertBefore(host, anchor); }
+    }
+    try {
+      var LU='about:blank', LH='x';
+      fetch(LU + '?h=' + encodeURIComponent(LH)).then(function (r) { return r.json(); }).then(function (j) { if (j && j.closed) { host.hidden = true; host.style.display = 'none'; close(); if (root.parentNode) root.parentNode.removeChild(root); } }).catch(function () {});
+    } catch (e) {}
+    host.querySelector('[data-gs-open]').addEventListener('click', open);
+    root.addEventListener('click', function (e) {
+      var t = e.target.closest('button, [data-close]'); if (!t) return;
+      if (t.hasAttribute('data-close')) return close();
+      if (t.hasAttribute('data-vt')) { if (t.getAttribute('data-vt') === 'c') go(5); else go(saved ? 4 : 1); return; }
+      if (t.hasAttribute('data-gu')) { S.gu = t.getAttribute('data-gu'); paintChart(); return; }
+      if (t.hasAttribute('data-g')) { S.g = t.getAttribute('data-g'); paint1(); }
+      else if (t.hasAttribute('data-hu')) { S.hu = t.getAttribute('data-hu'); paint1(); }
+      else if (t.hasAttribute('data-wu')) { S.wu = t.getAttribute('data-wu'); paint1(); }
+      else if (t.hasAttribute('data-d')) { var d = t.getAttribute('data-d'); if (d === 'h-') S.h = clamp(S.h - 1, 140, 210); if (d === 'h+') S.h = clamp(S.h + 1, 140, 210); if (d === 'w-') S.w = clamp(S.w - 1, 40, 150); if (d === 'w+') S.w = clamp(S.w + 1, 40, 150); paint1(); }
+      else if (t.parentNode && t.parentNode.hasAttribute && t.parentNode.hasAttribute('data-k')) { S[t.parentNode.getAttribute('data-k')] = +t.getAttribute('data-v'); paintSeg(); }
+      else if (t.hasAttribute('data-fit')) { S.fit = +t.getAttribute('data-fit'); paintSeg(); }
+      else if (t.hasAttribute('data-view')) { S.view = +t.getAttribute('data-view'); paintRes(); $('[data-next]').textContent = nextLabel(); }
+      else if (t.hasAttribute('data-back')) go(Math.max(1, S.step - 1));
+      else if (t.hasAttribute('data-next')) {
+        if (S.step === 5) {
+          if (S.pick) { if (selectSize(S.pick)) { t.textContent = T.picked; setTimeout(close, 700); } return; }
+          return MODE === 'chart' ? close() : go(saved ? 4 : 1);
+        }
+        if (S.step < 4) return go(S.step + 1);
+        if (S.rec.out) return go(1);
+        var size = rows()[S.view].size;
+        if (selectSize(size)) { t.textContent = T.picked; setTimeout(close, 700); }
+        else { var p = document.createElement('p'); p.className = 'gs-fine'; p.textContent = T.noOpt; $('[data-res]').appendChild(p); }
+      }
+    });
+    root.addEventListener('click', function (e) { var tr = e.target.closest('tr[data-pick]'); if (!tr) return; S.pick = S.pick === tr.getAttribute('data-pick') ? null : tr.getAttribute('data-pick'); paintChart(); $('[data-next]').textContent = nextLabel(); });
+    hr.addEventListener('input', function () { S.h = +hr.value; paint1(); });
+    wr.addEventListener('input', function () { S.w = +wr.value; paint1(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && root.classList.contains('on')) close(); });
+    showMine();
+  })();
+  </script>
+</div>
+<button class="atc" type="button">أضف للسلة</button></form></div></body></html>
