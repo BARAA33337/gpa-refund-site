@@ -128,6 +128,7 @@ h3{font-size:22px;line-height:1.35;font-weight:800}
 .band .sub{color:#b8b8b8}
 .band .kicker{color:var(--y)}
 .videos{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;align-items:start}
+.videos.one{grid-template-columns:1fr;max-width:900px;margin-inline:auto}
 .vid{background:#1d1d1d;border-radius:18px;overflow:hidden;border:1px solid #2c2c2c}
 .vid video{width:100%;aspect-ratio:9/16;object-fit:cover;background:#000}
 .vid.wide video{aspect-ratio:16/9}
